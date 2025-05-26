@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3842490976411280278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8618233500871548583}
+  - component: {fileID: 397615218959970330}
+  m_Layer: 0
+  m_Name: Camera_Change
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8618233500871548583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842490976411280278}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 400, y: 100, z: 400}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &397615218959970330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842490976411280278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 301977fb8a211024a9c07d4361f4f4b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Main_Camera: {fileID: 0}
+  camera_porn0: {fileID: 0}
+  camera_porn1: {fileID: 0}
+  camera_porn2: {fileID: 0}
+  camera_porn3: {fileID: 0}
+  camera_porn4: {fileID: 0}
+  camera_porn5: {fileID: 0}
+  camera_porn6: {fileID: 0}
+  camera_porn7: {fileID: 0}
+  camera_king: {fileID: 0}
+  camera_rook1: {fileID: 0}
+  camera_rook2: {fileID: 0}
+  camera_pijot1: {fileID: 0}
+  camera_pijot2: {fileID: 0}
+  camera_knight1: {fileID: 0}
+  camera_knight2: {fileID: 0}
+  camera_knight3: {fileID: 0}
+  camera_knight4: {fileID: 0}
+  camera_knight_up: {fileID: 0}
+  camera_knight5: {fileID: 0}
+  camera_knight6: {fileID: 0}
+  camera_knight7: {fileID: 0}
+  camera_knight8: {fileID: 0}
+  camera_knight_up2: {fileID: 0}
+  camera_queen: {fileID: 0}
