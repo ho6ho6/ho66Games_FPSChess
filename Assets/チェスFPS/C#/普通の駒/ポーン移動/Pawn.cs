@@ -192,27 +192,35 @@ public class Pawn : ChessPiece
         if(!has_moved){    //初回は2マス
                 Vector3 oneStep = base_pos + new Vector3(0, 0, 1 * grid * direction);
                 Vector3 twoStep = base_pos + new Vector3(0, 0, 2 * grid * direction);
+                Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
 
-            if(boardManager.IsWithinBounds(oneStep)){
-                validWorldPositions.Add(GridUtility.SnapToGrid(oneStep, transform.position.y));
-                validGridPositions.Add(GridUtility.ToGridPosition(oneStep));
+            if(!boardManager.IsOccupied(forward_occupied)){
+
+                if(boardManager.IsWithinBounds(oneStep)){
+                    validWorldPositions.Add(GridUtility.SnapToGrid(oneStep, transform.position.y));
+                    validGridPositions.Add(GridUtility.ToGridPosition(oneStep));
+                }
+
+                if(boardManager.IsWithinBounds(twoStep)){
+                    validWorldPositions.Add(GridUtility.SnapToGrid(twoStep, transform.position.y));
+                    validGridPositions.Add(GridUtility.ToGridPosition(twoStep));
+                }
+
+                    Debug.Log($"[pre_Moves pawn] Added first moves: {oneStep}, {twoStep}");
             }
-
-            if(boardManager.IsWithinBounds(twoStep)){
-                validWorldPositions.Add(GridUtility.SnapToGrid(twoStep, transform.position.y));
-                validGridPositions.Add(GridUtility.ToGridPosition(twoStep));
-            }
-
-                Debug.Log($"[pre_Moves pawn] Added first moves: {oneStep}, {twoStep}");
             
         } else {     //初回以降は1マス
                 Vector3 oneStep = base_pos + new Vector3(0, 0, 1 * grid * direction);
+                Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
 
-            if(boardManager.IsWithinBounds(oneStep)){
-                validWorldPositions.Add(GridUtility.SnapToGrid(oneStep, transform.position.y));
-                validGridPositions.Add(GridUtility.ToGridPosition(oneStep));
+            if(!boardManager.IsOccupied(forward_occupied)){
+                
+                if(boardManager.IsWithinBounds(oneStep)){
+                    validWorldPositions.Add(GridUtility.SnapToGrid(oneStep, transform.position.y));
+                    validGridPositions.Add(GridUtility.ToGridPosition(oneStep));
+                }
+                    Debug.Log($"[pre_Moves pawn] Added normal move: {oneStep}");
             }
-                Debug.Log($"[pre_Moves pawn] Added normal move: {oneStep}");
         }
       
         // 現在の位置自身を含める
