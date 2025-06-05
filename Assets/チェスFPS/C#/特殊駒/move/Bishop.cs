@@ -79,16 +79,22 @@ public class Bishop : ChessPiece
             if (Input.GetKeyDown(KeyCode.LeftShift) && camera_bishop.activeSelf)
             {   
                 Vector3 old_pos = last_pos;
+                Vector2Int capture = GridUtility.ToGridPosition(pos);
+
                 keep_pos = pos;
 
                 /*ここで敵駒の有無をチェック*/
                 ChessPiece target_pos = boardManager.GetPieceAtPosition(pos);
+                Debug.Log($"[bishop]ターゲットは: {target_pos?.name}, pos: {grid}");
 
                 if(target_pos != null && target_pos.isWhite != this.isWhite){
                     
-                    if(boardManager.TryMovePiece(this, pos))
+                    if(CanCapture(capture) && boardManager.IsOccupied(old_pos))
+                    Debug.Log("[bishop] 捕まえた");
                     TryCapture(pos);
+
                 } else {
+
                     if(boardManager.TryMovePiece(this, pos))
                     TryMove(pos);
                 }
@@ -198,13 +204,15 @@ public class Bishop : ChessPiece
     {
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
-        //if(boardManager.TryMovePiece(this, targetpos)){
+        if(boardManager.TryMovePiece(this, targetpos)){
             last_pos = pos;
             pos = targetpos;
             keep_pos = pos;
             transform.position = pos;
             pre_Moves(pos);
-        //}
+
+            boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(grid_targetpos, transform.position.y));  // 移動確定時に更新
+        }
     }
     
 

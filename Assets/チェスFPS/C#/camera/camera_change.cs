@@ -4,13 +4,13 @@ public class camera_change : MonoBehaviour
 {   
     /*俯瞰視点と駒視点で切り分ける*/
 
-    public GameObject Main_Camera;
-    public GameObject camera_porn0, camera_porn1, camera_porn2, camera_porn3, camera_porn4, camera_porn5, camera_porn6, camera_porn7,camera_queen,
-    camera_king, camera_knight1, camera_knight2, camera_knight3, camera_knight4,camera_knight_up, camera_knight5, camera_knight6, camera_knight7, camera_knight8, 
+    public GameObject Main_Camera, UI_Camera;
+    public GameObject camera_porn0, camera_porn1, camera_porn2, camera_porn3, camera_porn4, camera_porn5, camera_porn6, camera_porn7,
+    camera_queen,camera_king, camera_knight1, camera_knight2, camera_knight3, camera_knight4,camera_knight_up, camera_knight5, camera_knight6, camera_knight7, camera_knight8, 
     camera_knight_up2, camera_rook1, camera_rook2, camera_pijot1, camera_pijot2, 
     
-    camera_porn00,
-    camera_porn11, camera_porn22, camera_porn33,camera_porn44, camera_porn55,camera_porn66, camera_porn77,camera_king1, camera_queen1,camera_knight11,camera_knight22, camera_knight33, camera_knight44, camera_knight_up1,
+    camera_porn00,camera_porn11, camera_porn22, camera_porn33,camera_porn44, camera_porn55,camera_porn66, camera_porn77,
+    camera_king1, camera_queen1,camera_knight11,camera_knight22, camera_knight33, camera_knight44, camera_knight_up1,
     camera_knight55, camera_knight66, camera_knight77, camera_knight88, camera_knight_up22, 
     camera_rook11, camera_rook22, camera_pijot11, camera_pijot22;
     
@@ -35,6 +35,7 @@ public class camera_change : MonoBehaviour
     private void all_false()
     {
             Main_Camera.gameObject.SetActive(false);
+            UI_Camera.gameObject.SetActive(false);
             camera_porn0.gameObject.SetActive(false);
             camera_porn1.gameObject.SetActive(false);
             camera_porn2.gameObject.SetActive(false);
@@ -167,6 +168,9 @@ public class camera_change : MonoBehaviour
             all_false();
             camera_queen.gameObject.SetActive(true);
 
+        } else if(Input.GetKeyDown(KeyCode.Escape)){
+            all_false();
+            UI_Camera.gameObject.SetActive(true);
         }
     /*-----------------------------特殊駒-----------------------------*/
 
@@ -255,6 +259,9 @@ public class camera_change : MonoBehaviour
             all_false();
             camera_queen1.gameObject.SetActive(true);
 
+        } else if(Input.GetKeyDown(KeyCode.Escape)){
+            all_false();
+            UI_Camera.gameObject.SetActive(true);
         }
     /*-----------------------------特殊駒-----------------------------*/
         }

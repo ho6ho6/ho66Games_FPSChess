@@ -91,7 +91,7 @@ public class BoardManager : MonoBehaviour
 
     private void CallPreMovesInOrder(List<ChessPiece> pieces)
     {
-        foreach (var piece in boardState.Values)
+        foreach (var piece in boardState.Values)    //boardState.Values -> piece
         {
             piece.pre_Moves(piece.transform.position);
             Debug.Log($"[pre_Moves] {piece.name} moves updated.");
@@ -300,29 +300,31 @@ public class BoardManager : MonoBehaviour
         Vector2Int originalPos = GridUtility.ToGridPosition(piece.transform.position);
         ChessPiece capturedPiece = null;
 
-        // 移動先に駒がある場合は捕獲する
-        if (boardState.ContainsKey(targetPos))
-        {
-            capturedPiece = boardState[targetPos];
-            boardState.Remove(targetPos);
-        }
+            // 移動先に敵駒がいれば記録して一時的に盤面から除去
+            if (boardState.TryGetValue(targetPos, out capturedPiece))
+            {
+                boardState.Remove(targetPos);
+                capturedPiece.gameObject.SetActive(false); // 一時的に非アクティブ
+            }
 
-        // 仮に駒を移動させる
-        boardState[targetPos] = piece;
+        // 駒をターゲットに一時的に移動
         boardState.Remove(originalPos);
+        boardState[targetPos] = piece;
 
-        // 移動後にキングがチェックされているかを確認
-        bool isInCheck = IsKingInCheck(piece.isWhite);
+        // 味方キングがチェックされているかを確認
+        bool inCheck = IsKingInCheck(piece.isWhite);
 
         // 状態を元に戻す
         boardState.Remove(targetPos);
         boardState[originalPos] = piece;
-        if (capturedPiece != null)
-        {
-            boardState[targetPos] = capturedPiece;
-        }
 
-        return isInCheck;
+            if (capturedPiece != null)
+            {
+                boardState[targetPos] = capturedPiece;
+                capturedPiece.gameObject.SetActive(true); // 復活
+            }
+
+        return inCheck;
     }
 
 
