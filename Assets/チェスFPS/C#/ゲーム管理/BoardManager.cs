@@ -101,8 +101,8 @@ public class BoardManager : MonoBehaviour
     public void UpdateBoardState(ChessPiece piece, Vector3 new_pos, Vector3 last_pos)
     {   
 
-        Vector2Int newGridPos = GridUtility.ToGridPosition(new_pos);
-        Vector2Int lastGridPos = GridUtility.ToGridPosition(last_pos);
+        Vector2Int newGridPos = GridUtility.ToGridPosition(new_pos);    //new
+        Vector2Int lastGridPos = GridUtility.ToGridPosition(last_pos);  //old
         Debug.Log($"[UpdateBoardState] {piece.name}: {lastGridPos} → {newGridPos}");
 
         //古い位置の駒を削除
@@ -112,9 +112,11 @@ public class BoardManager : MonoBehaviour
             Debug.Log($"[UpdateBoardState] {piece.name} removed from {lastGridPos} (set to null)");
         }
         boardState[newGridPos] = piece;
-        
-        Debug.Log($"[UpdateBoardState] Clearing old pos: {lastGridPos} → null");
-        Debug.Log($"[UpdateBoardState] Setting new pos: {newGridPos} → {piece.name}");
+
+        foreach (var kvp in boardState)
+        {
+            Debug.Log($"[BoardState] {kvp.Key} に {kvp.Value.name}（{(kvp.Value.isWhite ? "白" : "黒")}）がいます");
+        }
 
     }
 
@@ -201,12 +203,14 @@ public class BoardManager : MonoBehaviour
 
 
     // GetPieceAtPositionメソッドを追加
-    public ChessPiece GetPieceAtPosition(Vector3 worldPos)
+    public ChessPiece GetPieceAtPosition(Vector3 worldPos, ChessPiece exclude)
     {
         var snapped = GridUtility.SnapToGrid(worldPos, 0); // 必ずSnap
         Vector2Int gridPos = GridUtility.ToGridPosition(snapped);
+
         if (boardState.TryGetValue(gridPos, out ChessPiece piece))
         {
+            if(piece == exclude) return null;
             return piece;
         }
         return null;

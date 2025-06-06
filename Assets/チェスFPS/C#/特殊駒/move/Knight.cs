@@ -107,7 +107,7 @@ public class Knight : ChessPiece
                 keep_pos = pos; //確定した位置の保持
 
                 /*ここで敵駒の有無をチェック*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos);
+                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
                 if(target_pos != null && target_pos.isWhite != this.isWhite){
                     Debug.Log($"[knight] target_pos: {target_pos}");
                     TryCapture(pos);
@@ -166,7 +166,7 @@ public class Knight : ChessPiece
             Vector2Int grid_Pos = GridUtility.ToGridPosition(snapped);
 
             if((grid_Pos.x >= 0 && grid_Pos.x < board_size) && (grid_Pos.y >= 0 && grid_Pos.y < board_size)){
-                ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped);
+                ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
                 Debug.Log($"Checking {snapped} → Occupied: {pieceAtPos != null} by: {pieceAtPos?.name}");
 
                 if (pieceAtPos == null)
@@ -268,7 +268,7 @@ public class Knight : ChessPiece
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
-        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos);
+        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);
     }
 

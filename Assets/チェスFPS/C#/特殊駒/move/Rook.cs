@@ -87,7 +87,7 @@ public class Rook : ChessPiece
                 keep_pos = pos;
                 
                 /*ここで敵駒の有無をチェック*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos);
+                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
 
                 if(target_pos != null && target_pos.isWhite != this.isWhite){
                     
@@ -145,7 +145,7 @@ public class Rook : ChessPiece
 
                 if(!boardManager.IsWithinBounds(check_pos)) break;
 
-                ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(check_pos);
+                ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(check_pos, this);
                 
                 if((blocking_Piece != null)){   //そこがボード内で
                 Debug.Log($"[Rook pre_Moves] 発見: {blocking_Piece.name} @ {check_pos}");
@@ -243,7 +243,7 @@ public class Rook : ChessPiece
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
-        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos);
+        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);
     }
 

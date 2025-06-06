@@ -86,7 +86,7 @@ public class King : ChessPiece
                 keep_pos = pos;
                 
                 /*ここで敵駒の有無をチェック*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos);
+                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
 
                 if(target_pos != null && target_pos.isWhite != this.isWhite){
                     
@@ -190,7 +190,7 @@ public class King : ChessPiece
                     if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)
                     break;
 
-                    ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(snapped);
+                    ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(snapped, this);
 
                     if(blocking_Piece == null){
                         validWorldPositions.Add(snapped);
@@ -285,7 +285,7 @@ public class King : ChessPiece
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
-        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos);
+        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);
     }
 

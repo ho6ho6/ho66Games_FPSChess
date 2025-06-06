@@ -51,23 +51,24 @@ public class Bishop : ChessPiece
         }
     }
 
+    if(camera_bishop.activeSelf){
         /*移動制御*/
-            if(Input.GetKeyDown(KeyCode.Mouse0) && camera_bishop.activeSelf){
+            if(Input.GetKeyDown(KeyCode.Mouse0)){
                 Vector3 new_pos = pos + new Vector3(-grid, 0, grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
-            } else if(Input.GetKeyDown(KeyCode.Mouse1) && camera_bishop.activeSelf){
+            } else if(Input.GetKeyDown(KeyCode.Mouse1)){
                 Vector3 new_pos = pos + new Vector3(grid, 0, grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
-            } else if(Input.GetKeyDown(KeyCode.Z) && camera_bishop.activeSelf){
+            } else if(Input.GetKeyDown(KeyCode.Z)){
                 Vector3 new_pos = pos + new Vector3(-grid, 0, -grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
-            } else if(Input.GetKeyDown(KeyCode.X) && camera_bishop.activeSelf){
+            } else if(Input.GetKeyDown(KeyCode.X)){
                 Vector3 new_pos = pos + new Vector3(grid, 0, -grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
@@ -76,18 +77,43 @@ public class Bishop : ChessPiece
         /*移動制御*/
 
             // 左シフトキーが押されたら現在位置で移動範囲を再計算
-            if (Input.GetKeyDown(KeyCode.LeftShift) && camera_bishop.activeSelf)
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {   
                 Vector3 old_pos = last_pos;
                 Vector2Int capture = GridUtility.ToGridPosition(pos);
-
                 keep_pos = pos;
 
+                Vector2Int grid = GridUtility.ToGridPosition(GridUtility.SnapToGrid(pos, 0));
+                Debug.Log($"[bishop] 調査中のグリッド: {grid}");
+
+                ChessPiece target = boardManager.GetPieceAtGridPosition(grid);
+
+                if (target != null && target != this && target.isWhite != this.isWhite)
+                {
+                    Debug.Log($"[bishop] 捕獲対象: {target.name}");
+                    TryCapture(pos);
+                }
+                else
+                {
+                    Debug.Log("[bishop] 捕獲対象なし or 自分自身");
+                }
+
                 /*ここで敵駒の有無をチェック*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos);
+                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
+                if (target_pos == null)
+                {
+                    Debug.Log("[bishop] target_pos is null");
+                }
+                else
+                {
+                    Debug.Log($"[bishop] ターゲット: {target_pos.name}, isWhite: {target_pos.isWhite}, this.isWhite: {this.isWhite}");
+                }
+
                 Debug.Log($"[bishop]ターゲットは: {target_pos?.name}, pos: {grid}");
 
                 if(target_pos != null && target_pos.isWhite != this.isWhite){
+                    Debug.Log("[bishop]ここまでは来ている");
+                    if(boardManager.IsOccupied(old_pos)) Debug.Log("[bishop]重なり情報はおｋ");
                     
                     if(CanCapture(capture) && boardManager.IsOccupied(old_pos))
                     Debug.Log("[bishop] 捕まえた");
@@ -104,6 +130,7 @@ public class Bishop : ChessPiece
                 boardManager.UpdateBoardState(this, pos, old_pos);
                 Debug.Log($"[bishop-{this.name}] pos: {pos}, last_pos: {last_pos}, keep_pos: {keep_pos}");
             }
+        }
 
             if(!validWorldPositions.Contains(pos)){   //範囲外に出たら元の位置に戻す
                 pos = last_pos;
@@ -138,7 +165,7 @@ public class Bishop : ChessPiece
                 if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)   //そこがボード内で
                     break;
 
-                ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(snapped);
+                ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(snapped, this);
 
                     if(blocking_Piece == null){
                     // 空きマス → 移動可能
@@ -237,7 +264,7 @@ public class Bishop : ChessPiece
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
-        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos);
+        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);
     }
 

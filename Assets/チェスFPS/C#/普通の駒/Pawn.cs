@@ -274,7 +274,7 @@ public class Pawn : ChessPiece
 
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
-        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos);
+        ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);
     }
 
