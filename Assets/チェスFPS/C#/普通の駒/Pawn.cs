@@ -141,7 +141,7 @@ public class Pawn : ChessPiece
 
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
-        if(IsInValidRange(targetpos) && boardManager.TryMovePiece(this, targetpos)){
+        if(boardManager.TryMovePiece(this, targetpos)){
                     last_pos = pos;
                     pos = targetpos;
                     transform.position = pos;

@@ -80,49 +80,17 @@ public class Bishop : ChessPiece
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {   
                 Vector3 old_pos = last_pos;
-                Vector2Int capture = GridUtility.ToGridPosition(pos);
+                Vector2Int capture = GridUtility.ToGridPosition(GridUtility.SnapToGrid(pos, 0));
                 keep_pos = pos;
+                ChessPiece target_pos = boardManager.GetPieceAtGridPosition(capture);
 
-                Vector2Int grid = GridUtility.ToGridPosition(GridUtility.SnapToGrid(pos, 0));
-                Debug.Log($"[bishop] 調査中のグリッド: {grid}");
-
-                ChessPiece target = boardManager.GetPieceAtGridPosition(grid);
-
-                if (target != null && target != this && target.isWhite != this.isWhite)
-                {
-                    Debug.Log($"[bishop] 捕獲対象: {target.name}");
-                    TryCapture(pos);
-                }
-                else
-                {
-                    Debug.Log("[bishop] 捕獲対象なし or 自分自身");
-                }
-
-                /*ここで敵駒の有無をチェック*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
-                if (target_pos == null)
-                {
-                    Debug.Log("[bishop] target_pos is null");
-                }
-                else
-                {
-                    Debug.Log($"[bishop] ターゲット: {target_pos.name}, isWhite: {target_pos.isWhite}, this.isWhite: {this.isWhite}");
-                }
-
-                Debug.Log($"[bishop]ターゲットは: {target_pos?.name}, pos: {grid}");
-
-                if(target_pos != null && target_pos.isWhite != this.isWhite){
+                Debug.Log($"[bishop] 捕獲判定: {target_pos?.name}, isWhite: {target_pos?.isWhite}, this: {this.name}, isWhite: {this.isWhite}");
+                if(CanCapture(capture) && boardManager.IsOccupied(pos)){
                     Debug.Log("[bishop]ここまでは来ている");
-                    if(boardManager.IsOccupied(old_pos)) Debug.Log("[bishop]重なり情報はおｋ");
-                    
-                    if(CanCapture(capture) && boardManager.IsOccupied(old_pos))
+
+                    //if(CanCapture(capture) && boardManager.IsOccupied(old_pos))
                     Debug.Log("[bishop] 捕まえた");
                     TryCapture(pos);
-
-                } else {
-
-                    if(boardManager.TryMovePiece(this, pos))
-                    TryMove(pos);
                 }
                 
                 pre_Moves(pos); //現在位置を基準に範囲を更新
@@ -183,9 +151,10 @@ public class Bishop : ChessPiece
                 }
 
             // 現在の位置自身を含める
-            if(!validWorldPositions.Contains(base_pos))
+            Vector3 snappedBase = GridUtility.SnapToGrid(base_pos, transform.position.y);
+            if(!validWorldPositions.Contains(snappedBase))
             {
-                validWorldPositions.Add(base_pos);
+                validWorldPositions.Add(snappedBase);
             }
         }
     /*-----------------------Bishopの移動可能範囲を更新-----------------------*/
@@ -218,10 +187,17 @@ public class Bishop : ChessPiece
     {
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
-        //if(boardManager.TryMovePiece(this, targetpos)){
-            Debug.Log("[TryMove bishop] Move succeeded!");
-                MoveTo(grid_targetpos);
-        //}
+        if(boardManager.TryMovePiece(this, targetpos)){
+            Debug.Log("[bishop] Move succeeded!");
+            last_pos = pos;
+            pos = targetpos;
+            transform.position = pos;
+
+            boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(grid_targetpos, transform.position.y));  // 移動確定時に更新
+            //MoveTo(gri_tdargetpos);
+        } else {
+            Debug.Log("[bishop] Move fault");
+        }
 
     }
 
@@ -262,12 +238,14 @@ public class Bishop : ChessPiece
     public override bool CanCapture(Vector2Int targetGridPos)
     {
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
+        // 「自駒の現在位置」と等しくないなら捕獲しない（仕様）
+        if (Vector3.Distance(pos, targetWorldPos) > 0.1f) return false;
+
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
         ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);
     }
-
 
     public override List<Vector3> Getvaild_pos()
     {
