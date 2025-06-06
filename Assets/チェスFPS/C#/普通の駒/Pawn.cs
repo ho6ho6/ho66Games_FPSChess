@@ -77,8 +77,8 @@ public class Pawn : ChessPiece
     /*動いたことあればhas_move = true, 無ければ false*/
 
         //Debug.Log($"has_moved: {has_moved}"); // デバッグ用
-    
-        //1,2
+
+        /*移動制御*/
             if(Input.GetKeyDown(KeyCode.Mouse0)){
                 new_pos = pos + new Vector3(0, 0, grid * direction);
                 TryMove(new_pos);
@@ -86,9 +86,9 @@ public class Pawn : ChessPiece
                 new_pos = pos + new Vector3(0, 0, grid * 2 * direction);
                 TryMove(new_pos);
             }
-
-
         /*移動制御*/
+
+        /*捕獲処理*/
             if(Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.LeftShift))
             {
                 Vector3 leftCapture = pos + new Vector3(-grid, 0, grid * direction);
@@ -109,7 +109,8 @@ public class Pawn : ChessPiece
                     TryCapture(rightCapture);
                 }
             }
-
+        /*捕獲処理*/
+        
             // 左シフトキーが押されたら現在位置で移動範囲を再計算
             if (Input.GetKeyDown(KeyCode.LeftShift)){
                 Vector3 old_pos = last_pos;

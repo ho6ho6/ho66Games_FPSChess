@@ -109,6 +109,7 @@ public class Knight : ChessPiece
                 /*ここで敵駒の有無をチェック*/
                 ChessPiece target_pos = boardManager.GetPieceAtPosition(pos);
                 if(target_pos != null && target_pos.isWhite != this.isWhite){
+                    Debug.Log($"[knight] target_pos: {target_pos}");
                     TryCapture(pos);
                 } else {
                     TryMove(pos);
