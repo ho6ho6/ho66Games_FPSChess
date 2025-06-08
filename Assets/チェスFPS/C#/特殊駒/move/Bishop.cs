@@ -2,27 +2,28 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class Bishop : ChessPiece
-{   /*シフトキーで決定するまでは駒を取らないようにしろ*/
+{
     
     /*----------------初期設定----------------*/
         private Vector3 pos; 
         public GameObject camera_bishop;
         private BoardManager boardManager;  //GameManagerで管理
-        private Vector3 last_pos, keep_pos, ini_pos;  //前回の位置、次の移動先の位置を一時的に保存するもの
-        int grid = 100;                     //人マスのサイズ
-    /*----------------初期設定----------------*/
+        private Vector3 last_pos, keep_pos, new_pos;  //前回の位置、次の移動先の位置を一時的に保存するもの
+        int grid = 100;                     //1マスのサイズ
+
 
         public override void Start()
         {
             boardManager = FindFirstObjectByType<BoardManager>();
             pos = BoardManager.SnapToGrid(transform.position);    // transform.position を元に pos をスナップ
-            ini_pos = pos;
+            new_pos = pos;
             keep_pos = pos; 
             last_pos = pos;           //初期設定を保存
             pre_Moves(pos);
             Vector2Int gridPos = GridUtility.ToGridPosition(pos);
-        boardManager.UpdateBoardState(this, GridUtility.ToWorldPosition(gridPos, transform.position.y), GridUtility.ToWorldPosition(gridPos, transform.position.y));
+            boardManager.UpdateBoardState(this, GridUtility.ToWorldPosition(gridPos, transform.position.y), GridUtility.ToWorldPosition(gridPos, transform.position.y));
     }
+    /*----------------初期設定----------------*/
 
     void Update()
     {   
@@ -30,46 +31,47 @@ public class Bishop : ChessPiece
     }
 
     /*-----------------------動き-----------------------*/
-        private void Move_bishop()
-        {   
+    private void Move_bishop()
+    {   
         
-                /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
-    if(!camera_bishop.activeSelf){
-        
-        if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
-                Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
+        /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
+        if(!camera_bishop.activeSelf){
+            
+            if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
+                    Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
 
-                pos = keep_pos;           // 一つ前に戻す
-                transform.position = pos; // 実際の位置を更新                
-                pre_Moves(pos);           // 移動範囲を再計算
+                    pos = keep_pos;           // 一つ前に戻す
+                    transform.position = pos; // 実際の位置を更新                
+                    pre_Moves(pos);           // 移動範囲を再計算
 
-                Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
-                boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
-                last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
+                    Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
+                    boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
+                    last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
 
-                Debug.Log($"[bishop-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+                    Debug.Log($"[bishop-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+            }
+            return;
         }
-    }
 
     if(camera_bishop.activeSelf){
         /*移動制御*/
             if(Input.GetKeyDown(KeyCode.Mouse0)){
-                Vector3 new_pos = pos + new Vector3(-grid, 0, grid);
+                new_pos = pos + new Vector3(-grid, 0, grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1)){
-                Vector3 new_pos = pos + new Vector3(grid, 0, grid);
+                new_pos = pos + new Vector3(grid, 0, grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
             } else if(Input.GetKeyDown(KeyCode.Z)){
-                Vector3 new_pos = pos + new Vector3(-grid, 0, -grid);
+                new_pos = pos + new Vector3(-grid, 0, -grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
             } else if(Input.GetKeyDown(KeyCode.X)){
-                Vector3 new_pos = pos + new Vector3(grid, 0, -grid);
+                new_pos = pos + new Vector3(grid, 0, -grid);
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
@@ -80,19 +82,19 @@ public class Bishop : ChessPiece
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {   
                 Vector3 old_pos = last_pos;
-                Vector2Int capture = GridUtility.ToGridPosition(GridUtility.SnapToGrid(pos, 0));
+                last_pos = pos;
+                pos = new_pos;
                 keep_pos = pos;
-                ChessPiece target_pos = boardManager.GetPieceAtGridPosition(capture);
 
-                Debug.Log($"[bishop] 捕獲判定: {target_pos?.name}, isWhite: {target_pos?.isWhite}, this: {this.name}, isWhite: {this.isWhite}");
-                if(CanCapture(capture) && boardManager.IsOccupied(pos)){
-                    Debug.Log("[bishop]ここまでは来ている");
-
-                    //if(CanCapture(capture) && boardManager.IsOccupied(old_pos))
-                    Debug.Log("[bishop] 捕まえた");
+                /*駒の有無*/
+                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
+                if(target_pos != null && target_pos.isWhite != this.isWhite){
+                    Debug.Log($"[bishop] target_pos: {target_pos}");
                     TryCapture(pos);
+                } else {
+                    TryMove(pos);
                 }
-                
+
                 pre_Moves(pos); //現在位置を基準に範囲を更新
                 BoardManager.instance.isWhiteTurn = false;
                 boardManager.UpdateBoardState(this, pos, old_pos);
@@ -104,74 +106,71 @@ public class Bishop : ChessPiece
                 pos = last_pos;
                 transform.position = pos;
             }
-        }
+    }
     /*-----------------------動き-----------------------*/
 
 
     /*-----------------------Bishopの移動可能範囲を更新-----------------------*/
-        public override void pre_Moves(Vector3 base_pos)
+    public override void pre_Moves(Vector3 base_pos)
+    {
+        int board_size = 8;
+        float gridSize = grid; //100
+        validWorldPositions = new List<Vector3>();
+
+        Vector3[] move_bishop = new Vector3[] {
+            new Vector3(-grid, 0, grid),   // ↑
+            new Vector3(grid, 0, grid),  // ↓
+            new Vector3(grid, 0, -grid),   // ←
+            new Vector3(-grid, 0, -grid)   // →
+        };
+
+
+        foreach (Vector3 dir in move_bishop)
         {
-            int board_size = 8;
-            float gridSize = grid;
-            validWorldPositions = new List<Vector3>();
+            for(int i = 1; i < board_size; i++){
+                Vector3 check_pos = base_pos + dir * i;
+                Vector3 snapped = GridUtility.SnapToGrid(check_pos, transform.position.y);
+                
+                Vector2Int grid_Pos = GridUtility.ToGridPosition(snapped);
 
-            Vector3[] directions = {
-                new Vector3(-grid, 0, grid),   // ↑
-                new Vector3(grid, 0, grid),  // ↓
-                new Vector3(-grid, 0, -grid),   // →
-                new Vector3(grid, 0, -grid)   // ←
-            };
+                if((grid_Pos.x >= 0 && grid_Pos.x < board_size) && (grid_Pos.y >= 0 && grid_Pos.y < board_size))   //そこがボード内で
+                {
 
+                ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
 
-            foreach (Vector3 dir in directions)
-            {
-                for(int i = 1; i < board_size; i++){
-                    Vector3 check_pos = base_pos + dir * i;
-                    Vector3 snapped = GridUtility.SnapToGrid(check_pos, transform.position.y);
-                    Vector2Int grid_Pos = GridUtility.ToGridPosition(snapped);
-
-                if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)   //そこがボード内で
-                    break;
-
-                ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(snapped, this);
-
-                    if(blocking_Piece == null){
+                    if(pieceAtPos == null){
                     // 空きマス → 移動可能
                     validWorldPositions.Add(snapped);
 
-                    } else {
-                        
-                        if(blocking_Piece.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
+                    } else if(pieceAtPos.isWhite != this.isWhite){
+                        //何か駒があり、それが黒で自分も黒なら
                             validWorldPositions.Add(snapped);   //そのマスも含める
-                        }
-
-                        break;
-                        }
                     }
                 }
-
-            // 現在の位置自身を含める
-            Vector3 snappedBase = GridUtility.SnapToGrid(base_pos, transform.position.y);
-            if(!validWorldPositions.Contains(snappedBase))
-            {
-                validWorldPositions.Add(snappedBase);
             }
         }
+
+            // 現在の位置自身を含める
+        if(!validWorldPositions.Contains(base_pos))
+        {
+                validWorldPositions.Add(base_pos);
+        }
+    }
     /*-----------------------Bishopの移動可能範囲を更新-----------------------*/
 
 
     /*-----------------------デバッグ用：移動可能な範囲を可視化-----------------------*/
-        void OnDrawGizmos()
-        {
-            if (validWorldPositions != null)
+    void OnDrawGizmos()
+    {
+        if (validWorldPositions != null)
             {
-                Gizmos.color = Color.cyan;
-                foreach (Vector3 vaild_pos in validWorldPositions)
-                {
-                    Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
-                }
+            Gizmos.color = Color.cyan;
+            foreach (Vector3 vaild_pos in validWorldPositions)
+            {
+                Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
             }
         }
+    }
 
     private bool IsInValidPos(Vector3 target)
     {
@@ -188,21 +187,22 @@ public class Bishop : ChessPiece
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
         if(boardManager.TryMovePiece(this, targetpos)){
-            Debug.Log("[bishop] Move succeeded!");
-            last_pos = pos;
-            pos = targetpos;
-            transform.position = pos;
-
-            boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(grid_targetpos, transform.position.y));  // 移動確定時に更新
-            //MoveTo(gri_tdargetpos);
+            MoveTo(grid_targetpos);
         } else {
             Debug.Log("[bishop] Move fault");
         }
 
     }
 
+    public override void MoveTo(Vector2Int targetGridPos)
+    {
+        Vector2Int oldGridPos = GridUtility.ToGridPosition(pos);
+        pos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y); // グリッド座標 → ワールド座標に変換
+        transform.position = pos;
+        boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));  // 移動確定時に更新
+    }
 
-            /*捕獲関数*/
+    /*捕獲関数*/
     public override void TryCapture(Vector3 targetpos)
     {
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
@@ -213,20 +213,8 @@ public class Bishop : ChessPiece
             keep_pos = pos;
             transform.position = pos;
             pre_Moves(pos);
-
-            boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(grid_targetpos, transform.position.y));  // 移動確定時に更新
         }
     }
-    
-
-    public override void MoveTo(Vector2Int targetGridPos)
-    {
-        Vector2Int oldGridPos = GridUtility.ToGridPosition(pos);
-        pos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y); // グリッド座標 → ワールド座標に変換
-        transform.position = pos;
-        boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));  // 移動確定時に更新
-    }
-
 
     public override bool CanMove(Vector2Int targetGridPos)
     {
@@ -238,9 +226,6 @@ public class Bishop : ChessPiece
     public override bool CanCapture(Vector2Int targetGridPos)
     {
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
-        // 「自駒の現在位置」と等しくないなら捕獲しない（仕様）
-        if (Vector3.Distance(pos, targetWorldPos) > 0.1f) return false;
-
         if (!boardManager.IsOccupied(targetWorldPos)) return false;
 
         ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);

@@ -23,24 +23,29 @@ public class Knight : ChessPiece
 
     void Update()
     {   
+        Move_knight();
+    }
+
+    private void Move_knight()
+    {
         /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
 
         if(!camera_knight.activeSelf){
         
-        if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
-            Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
+            if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
+                Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
 
-                pos = keep_pos;           // 一つ前に戻す
-                ini_pos = pos;
-                transform.position = pos; // 実際の位置を更新
-                pre_Moves(pos);           // 移動範囲を再計算
+                    pos = keep_pos;           // 一つ前に戻す
+                    ini_pos = pos;
+                    transform.position = pos; // 実際の位置を更新
+                    pre_Moves(pos);           // 移動範囲を再計算
 
-                Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
-                boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
-                last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
+                    Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
+                    boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
+                    last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
 
-                Debug.Log($"[knight-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
-        }
+                    Debug.Log($"[knight-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+            }
         return;
 
     /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
@@ -145,7 +150,7 @@ public class Knight : ChessPiece
             float gridSize = grid;  //100
             validWorldPositions = new List<Vector3>();
 
-            Vector3[] Move_knight = new Vector3[]{
+            Vector3[] move_knight = new Vector3[]{
 
         new Vector3(-1, 0, 2) * gridSize, // 左上
         new Vector3(-2, 0, 1) * gridSize,  // 左上の一個下
@@ -158,7 +163,7 @@ public class Knight : ChessPiece
 
         };
 
-        foreach (Vector3 move in Move_knight){
+        foreach (Vector3 move in move_knight){
             
             Vector3 new_pos = base_pos + move;
             Vector3 snapped = GridUtility.SnapToGrid(new_pos, transform.position.y);
