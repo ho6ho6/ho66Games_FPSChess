@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class Pawn : ChessPiece
 {   
 
-    /*----------------初期設定----------------*/
     Vector3 pos; //前2マス、途中から1マスしか進めないけどポテンシャルはある
     public GameObject camera_Porn;
     int grid = 100;
@@ -12,7 +11,6 @@ public class Pawn : ChessPiece
     private bool has_moved;             //ポーンが動いたらを判別
     private BoardManager boardManager;  //GameManagerで管理
     //public bool isWhite = true; //白か黒か　白＝true 黒＝false
-
 
     public override void Start()
     {
@@ -26,18 +24,13 @@ public class Pawn : ChessPiece
         Vector2Int gridPos = GridUtility.ToGridPosition(pos);
         boardManager.UpdateBoardState(this, GridUtility.ToWorldPosition(gridPos), GridUtility.ToWorldPosition(gridPos));
     }
-    /*----------------初期設定----------------*/
+
+
 
     void Update()
     {   
-        Move_pawn();
-    }
-    
 
-    /*動き*/
-    private void Move_pawn()
-    {
-        int direction = isWhite ? 1 : -1; //白か黒か
+        int direction = isWhite ? 1 : -1;
 
         // cameraPawnがnullなら警告
         if (camera_Porn == null)
@@ -136,6 +129,7 @@ public class Pawn : ChessPiece
         }
 
     }
+    /*カメラがアクティブの時*/
 
 
 

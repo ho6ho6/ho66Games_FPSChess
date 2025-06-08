@@ -210,9 +210,7 @@ public class BoardManager : MonoBehaviour
 
         if (boardState.TryGetValue(gridPos, out ChessPiece piece))
         {
-            if(piece == exclude) {
-                return null;
-            }
+            if(piece == exclude) return null;
             return piece;
         }
         return null;
