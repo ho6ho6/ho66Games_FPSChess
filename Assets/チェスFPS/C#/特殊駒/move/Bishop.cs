@@ -159,19 +159,6 @@ public class Bishop : ChessPiece
     /*-----------------------Bishopの移動可能範囲を更新-----------------------*/
 
 
-    /*-----------------------デバッグ用：移動可能な範囲を可視化-----------------------*/
-    void OnDrawGizmos()
-    {
-        if (validWorldPositions != null)
-            {
-            Gizmos.color = Color.cyan;
-            foreach (Vector3 vaild_pos in validWorldPositions)
-            {
-                Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
-            }
-        }
-    }
-
     private bool IsInValidPos(Vector3 target)
     {
         foreach (var v in validWorldPositions)
@@ -237,4 +224,17 @@ public class Bishop : ChessPiece
         return validWorldPositions;
     }
 
+
+    /*-----------------------デバッグ用：移動可能な範囲を可視化-----------------------*/
+    void OnDrawGizmos()
+    {
+        if (validWorldPositions != null)
+            {
+            Gizmos.color = Color.cyan;
+            foreach (Vector3 vaild_pos in validWorldPositions)
+            {
+                Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
+            }
+        }
+    }
 }
