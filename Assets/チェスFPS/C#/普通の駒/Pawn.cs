@@ -201,7 +201,7 @@ public class Pawn : ChessPiece
                 Vector3 twoStep = base_pos + new Vector3(0, 0, 2 * grid * direction);
                 Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
 
-            if(!boardManager.IsOccupied(forward_occupied)){
+            if(!boardManager.IsOccupied(forward_occupied)){ //目の前に駒がない時
 
                 if(boardManager.IsWithinBounds(oneStep)){
                     validWorldPositions.Add(GridUtility.SnapToGrid(oneStep, transform.position.y));
@@ -278,7 +278,7 @@ public class Pawn : ChessPiece
     {
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
 
-        if (!boardManager.IsOccupied(targetWorldPos)) return false;
+        if(!boardManager.IsOccupied(targetWorldPos)) return false;
 
         ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);

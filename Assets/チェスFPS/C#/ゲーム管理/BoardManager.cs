@@ -146,12 +146,16 @@ public class BoardManager : MonoBehaviour
         } else if(piece.CanCapture(gridPos)){
             Debug.Log("[TryMovePiece] CanCapture OK");
             ChessPiece captured = boardState.ContainsKey(gridPos) ? boardState[gridPos] : null;
+            
+            if(Input.GetKeyDown(KeyCode.LeftShift)){
+                CapturePieceAt(finalPos);
+                piece.MoveTo(gridPos);
 
-            CapturePieceAt(finalPos);
-            piece.MoveTo(gridPos);
+                UpdateBoardState(piece, piece.transform.position, finalPos);
+                return true;
+            }
+            
 
-            UpdateBoardState(piece, piece.transform.position, finalPos);
-            return true;
         }
         Debug.Log("[TryMovePiece] Move not allowed");
         return false;

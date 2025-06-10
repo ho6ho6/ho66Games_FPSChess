@@ -5,23 +5,23 @@ public class Bishop : ChessPiece
 {
     
     /*----------------初期設定----------------*/
-        private Vector3 pos; 
-        public GameObject camera_bishop;
-        private BoardManager boardManager;  //GameManagerで管理
-        private Vector3 last_pos, keep_pos, new_pos;  //前回の位置、次の移動先の位置を一時的に保存するもの
-        int grid = 100;                     //1マスのサイズ
+    private Vector3 pos; 
+    public GameObject camera_bishop;
+    private BoardManager boardManager;  //GameManagerで管理
+    private Vector3 last_pos, keep_pos, new_pos;  //前回の位置、次の移動先の位置を一時的に保存するもの
+    int grid = 100;                     //1マスのサイズ
 
 
-        public override void Start()
-        {
-            boardManager = FindFirstObjectByType<BoardManager>();
-            pos = BoardManager.SnapToGrid(transform.position);    // transform.position を元に pos をスナップ
-            new_pos = pos;
-            keep_pos = pos; 
-            last_pos = pos;           //初期設定を保存
-            pre_Moves(pos);
-            Vector2Int gridPos = GridUtility.ToGridPosition(pos);
-            boardManager.UpdateBoardState(this, GridUtility.ToWorldPosition(gridPos, transform.position.y), GridUtility.ToWorldPosition(gridPos, transform.position.y));
+    public override void Start()
+    {
+        boardManager = FindFirstObjectByType<BoardManager>();
+        pos = BoardManager.SnapToGrid(transform.position);    // transform.position を元に pos をスナップ
+        new_pos = pos;
+        keep_pos = pos; 
+        last_pos = pos;           //初期設定を保存
+        pre_Moves(pos);
+        Vector2Int gridPos = GridUtility.ToGridPosition(pos);
+        boardManager.UpdateBoardState(this, GridUtility.ToWorldPosition(gridPos, transform.position.y), GridUtility.ToWorldPosition(gridPos, transform.position.y));
     }
     /*----------------初期設定----------------*/
 
@@ -87,12 +87,19 @@ public class Bishop : ChessPiece
                 keep_pos = pos;
 
                 /*駒の有無*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
-                if(target_pos != null && target_pos.isWhite != this.isWhite){
-                    Debug.Log($"[bishop] target_pos: {target_pos}");
+                // ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
+                // if(target_pos != null && target_pos.isWhite != this.isWhite){
+                //     Debug.Log($"[bishop] target_pos: {target_pos}");
+                //     TryCapture(pos);
+                // } else {
+                //     TryMove(pos);
+                // }
+                Vector2Int capture_Pos = GridUtility.ToGridPosition(pos);
+                if(CanCapture(capture_Pos) && boardManager.IsOccupied(pos)){
+                    Debug.Log("[bishop]TryCaptureします");
                     TryCapture(pos);
-                } else {
-                    TryMove(pos);
+                    BoardManager.instance.isWhiteTurn = false;
+                    return;
                 }
 
                 pre_Moves(pos); //現在位置を基準に範囲を更新
@@ -102,10 +109,10 @@ public class Bishop : ChessPiece
             }
         }
 
-            if(!validWorldPositions.Contains(pos)){   //範囲外に出たら元の位置に戻す
-                pos = last_pos;
-                transform.position = pos;
-            }
+        if(!validWorldPositions.Contains(pos)){   //範囲外に出たら元の位置に戻す
+            pos = last_pos;
+            transform.position = pos;
+        }
     }
     /*-----------------------動き-----------------------*/
 
@@ -130,23 +137,22 @@ public class Bishop : ChessPiece
             for(int i = 1; i < board_size; i++){
                 Vector3 check_pos = base_pos + dir * i;
                 Vector3 snapped = GridUtility.SnapToGrid(check_pos, transform.position.y);
-                
                 Vector2Int grid_Pos = GridUtility.ToGridPosition(snapped);
 
-                if((grid_Pos.x >= 0 && grid_Pos.x < board_size) && (grid_Pos.y >= 0 && grid_Pos.y < board_size))   //そこがボード内で
-                {
+                if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)    break;
+                
 
                 ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
 
-                    if(pieceAtPos == null){
-                    // 空きマス → 移動可能
-                    validWorldPositions.Add(snapped);
-
-                    } else if(pieceAtPos.isWhite != this.isWhite){
-                        //何か駒があり、それが黒で自分も黒なら
-                            validWorldPositions.Add(snapped);   //そのマスも含める
+                if((pieceAtPos != null)){   //そこがボード内で
+                Debug.Log($"[Bishop pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
+                    if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
+                        validWorldPositions.Add(snapped);   //そのマスも含める
                     }
+                    break;  //味方でも敵でもそのマス以上は進めない
                 }
+
+                validWorldPositions.Add(snapped);   //何も無ければ進んでいい
             }
         }
 
@@ -171,10 +177,13 @@ public class Bishop : ChessPiece
     /*移動関数*/
     public override void TryMove(Vector3 targetpos)
     {
+        Debug.Log($"[bishop] TryMove bishop called: pos={pos}, target={targetpos}");
+        Debug.Log($"[bishop] TryMove bishop pos(before): {pos}, target: {targetpos}");
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
         if(boardManager.TryMovePiece(this, targetpos)){
             MoveTo(grid_targetpos);
+
         } else {
             Debug.Log("[bishop] Move fault");
         }
@@ -182,7 +191,7 @@ public class Bishop : ChessPiece
     }
 
     public override void MoveTo(Vector2Int targetGridPos)
-    {
+    {   
         Vector2Int oldGridPos = GridUtility.ToGridPosition(pos);
         pos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y); // グリッド座標 → ワールド座標に変換
         transform.position = pos;
@@ -213,7 +222,7 @@ public class Bishop : ChessPiece
     public override bool CanCapture(Vector2Int targetGridPos)
     {
         Vector3 targetWorldPos = GridUtility.ToWorldPosition(targetGridPos, transform.position.y);
-        if (!boardManager.IsOccupied(targetWorldPos)) return false;
+        if(!boardManager.IsOccupied(targetWorldPos)) return false;
 
         ChessPiece targetPiece = boardManager.GetPieceAtPosition(targetWorldPos, this);
         return targetPiece != null && targetPiece.isWhite != this.isWhite && validWorldPositions.Contains(targetWorldPos);

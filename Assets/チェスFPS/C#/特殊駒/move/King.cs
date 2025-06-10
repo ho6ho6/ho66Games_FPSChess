@@ -7,7 +7,7 @@ public class King : ChessPiece
         private Vector3 pos; //前後左右斜め1マスしか進めない
         public GameObject camera_king;
         private BoardManager boardManager;  //GameManagerで管理
-        private Vector3 last_pos, new_pos, keep_pos, ini_pos;  //前回の位置、次の移動先の位置を一時的に保存するもの keep_pos 動く前の場所を保存
+        private Vector3 last_pos, new_pos, keep_pos;  //前回の位置、次の移動先の位置を一時的に保存するもの keep_pos 動く前の場所を保存
         int grid = 100;                     //1マスのサイズ
 
 
@@ -15,10 +15,9 @@ public class King : ChessPiece
     {
             boardManager = FindFirstObjectByType<BoardManager>();
             pos = BoardManager.SnapToGrid(transform.position);    // transform.position を元に pos をスナップ
-            ini_pos = pos;
             keep_pos = pos; 
             last_pos = pos;           //初期設定を保存
-            //pre_Moves(pos);
+            pre_Moves(pos);
             Vector2Int gridPos = GridUtility.ToGridPosition(pos);
         boardManager.UpdateBoardState(this, GridUtility.ToWorldPosition(gridPos, transform.position.y), GridUtility.ToWorldPosition(gridPos, transform.position.y));
     }
@@ -28,50 +27,48 @@ public class King : ChessPiece
         Move_king();
     }
 
-    private void Move_king(){
+    private void Move_king()
+    {
 
-    /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
-    if(!camera_king.activeSelf){
-        
-        if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
+        /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
+        if(!camera_king.activeSelf){
+            
+            if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
 
-                Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
+                    Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
 
-                pos = keep_pos;           // 一つ前に戻す
-                transform.position = pos; // 実際の位置を更新                
-                pre_Moves(pos);           // 移動範囲を再計算
+                    pos = keep_pos;           // 一つ前に戻す
+                    transform.position = pos; // 実際の位置を更新                
+                    pre_Moves(pos);           // 移動範囲を再計算
 
-                Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
-                boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
-                last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
+                    Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
+                    boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
+                    last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
 
-                Debug.Log($"[king-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+                    Debug.Log($"[king-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+            }
+            return;
         }
-    }
 
     if(camera_king.activeSelf){
 
         if(Input.GetKeyDown(KeyCode.Mouse0)){
-
-                Vector3 new_pos = pos + new Vector3(0, 0, grid); //前方に移動 z
+                new_pos = pos + new Vector3(0, 0, grid); //前方に移動 z
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
             } else if(Input.GetKeyDown(KeyCode.Mouse1)){
-                
-                Vector3 new_pos = pos + new Vector3(grid, 0, 0); //右方に移動 x
+                new_pos = pos + new Vector3(grid, 0, 0); //右方に移動 x
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
             } else if(Input.GetKeyDown(KeyCode.Z)){
-
-                Vector3 new_pos = pos + new Vector3(-grid, 0, 0); //左方に移動 -x
+                new_pos = pos + new Vector3(-grid, 0, 0); //左方に移動 -x
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
             } else if(Input.GetKeyDown(KeyCode.X)){
-            
-                Vector3 new_pos = pos + new Vector3(0, 0, -grid); //下方に移動 -z
+                new_pos = pos + new Vector3(0, 0, -grid); //下方に移動 -z
                 if(IsInValidPos(new_pos)){
                     TryMove(new_pos);
                 }
@@ -83,18 +80,19 @@ public class King : ChessPiece
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 Vector3 old_pos = last_pos;
+                last_pos = pos;
+                pos = new_pos;
                 keep_pos = pos;
                 
                 /*ここで敵駒の有無をチェック*/
-                ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
+                //ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
 
-                if(target_pos != null && target_pos.isWhite != this.isWhite){
-                    
-                    if(boardManager.TryMovePiece(this, pos))
+                Vector2Int capture_Pos = GridUtility.ToGridPosition(pos);
+                if(CanCapture(capture_Pos) && boardManager.IsOccupied(pos)){
+                    Debug.Log("[bishop]TryCaptureします");
                     TryCapture(pos);
-                } else {
-                    if(boardManager.TryMovePiece(this, pos))
-                    TryMove(pos);
+                    BoardManager.instance.isWhiteTurn = false;
+                    return;
                 }
                 
                 pre_Moves(pos); //現在位置を基準に範囲を更新
@@ -119,58 +117,7 @@ public class King : ChessPiece
             float gridSize = grid;
             validWorldPositions = new List<Vector3>();
 
-            // int current_X = Mathf.RoundToInt(base_pos.x / gridSize);
-            // int current_Z = Mathf.RoundToInt(base_pos.z / gridSize);
-            
-            // // 縦方向
-            //     int z = 1;
-            //     int new_Z_up = current_Z + z; //上
-
-            //     if(new_Z_up >= 0 && new_Z_up < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(0, 0, z * grid));  // 上
-                
-            //     int new_Z_down = current_Z - z; //上
-            //     if(new_Z_down >= 0 && new_Z_down < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(0, 0, -z * grid)); // 下
-
-            // // 横方向
-            //     int x = 1;
-            //     int new_X_right = current_X + x; // 右
-            //     if (new_X_right >= 0 && new_X_right < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(x * grid, 0, 0));  // 右
-
-            //     int new_X_left = current_X - x; // 左
-            //     if (new_X_left >= 0 && new_X_right < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(-x * grid, 0, 0)); // 左
-
-            // // 斜め方向
-            //     int i = 1;
-            //     // 右上
-            //     int new_X_ru = current_X + i;
-            //     int new_Z_ru = current_Z + i;
-            //     if (new_X_ru >= 0 && new_X_ru < board_size && new_Z_ru >= 0 && new_Z_ru < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(i * grid, 0, i * grid));
-
-            //     // 右下
-            //     int new_X_rd = current_X + i;
-            //     int new_Z_rd = current_Z - i;
-            //     if (new_X_rd >= 0 && new_X_rd < board_size && new_Z_rd >= 0 && new_Z_rd < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(i * grid, 0, -i * grid));
-
-            //     // 左上
-            //     int new_X_lu = current_X - i;
-            //     int new_Z_lu = current_Z + i;
-            //     if (new_X_lu >= 0 && new_X_lu < board_size && new_Z_lu >= 0 && new_Z_lu < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(-i * grid, 0, i * grid));
-
-            //     // 左下
-            //     int new_X_ld = current_X - i;
-            //     int new_Z_ld = current_Z - i;
-            //     if (new_X_ld >= 0 && new_X_ld < board_size && new_Z_ld >= 0 && new_Z_ld < board_size)
-            //     validWorldPositions.Add(base_pos + new Vector3(-i * grid, 0, -i * grid));
-
-
-            Vector3[] directions = {
+            Vector3[] move_king = {
                 new Vector3(-grid, 0, 0),   // ←
                 new Vector3(grid, 0, 0),    // →
                 new Vector3(0, 0, grid),    // ↑
@@ -181,7 +128,8 @@ public class King : ChessPiece
                 new Vector3(grid, 0, -grid)    // ↘
             };
 
-            foreach(Vector3 dir in directions){
+            foreach(Vector3 dir in move_king)
+            {
                 for(int i=1; i<2; i++){
                     Vector3 check_pos = base_pos + dir;
                     Vector3 snapped = GridUtility.SnapToGrid(check_pos, transform.position.y);
@@ -190,16 +138,17 @@ public class King : ChessPiece
                     if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)
                     break;
 
-                    ChessPiece blocking_Piece = boardManager.GetPieceAtPosition(snapped, this);
+                    ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
 
-                    if(blocking_Piece == null){
-                        validWorldPositions.Add(snapped);
-                    } else {
-                        if(blocking_Piece.isWhite != this.isWhite){
-                            validWorldPositions.Add(snapped);
-                        }
-                        break;
+                if((pieceAtPos != null)){   //そこがボード内で
+                Debug.Log($"[King pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
+                    if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
+                        validWorldPositions.Add(snapped);   //そのマスも含める
                     }
+                    break;  //味方でも敵でもそのマス以上は進めない
+                }
+
+                validWorldPositions.Add(snapped);   //何も無ければ進んでいい
                 }
             }
 
@@ -241,11 +190,12 @@ public class King : ChessPiece
 
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
-        //if(boardManager.TryMovePiece(this, targetpos)){
-            Debug.Log("[TryMove king] Move succeeded!");
-                MoveTo(grid_targetpos);
+        if(boardManager.TryMovePiece(this, targetpos)){
+            MoveTo(grid_targetpos);
 
-        //}
+        } else {
+            Debug.Log("[bishop] Move fault");
+        }
     }
 
 
@@ -254,13 +204,13 @@ public class King : ChessPiece
     {
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
-        //if(boardManager.TryMovePiece(this, targetpos)){
+        if(boardManager.TryMovePiece(this, targetpos)){
             last_pos = pos;
             pos = targetpos;
             keep_pos = pos;
             transform.position = pos;
             pre_Moves(pos);
-        //}
+        }
     }
     
 
