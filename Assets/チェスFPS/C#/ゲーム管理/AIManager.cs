@@ -23,7 +23,9 @@ public class AIManager : MonoBehaviour
             {
                 AiPieces.Add(piece);
             }
+            Debug.Log($"Found piece: {piece.name}, isWhite: {piece.isWhite}");
         }
+        
     }
 
 
@@ -41,6 +43,9 @@ public class AIManager : MonoBehaviour
 
     IEnumerator MakeCPUMove()
     {
+
+        var board = BoardManager.instance;
+
         ChessPiece selectedPiece = GetRandomMovablePiece();
 
         if (selectedPiece == null)
@@ -60,7 +65,6 @@ public class AIManager : MonoBehaviour
             yield break;
         }
 
-        Vector3 beforePos = selectedPiece.transform.position; // 必ずbeforeを保存
         Vector2Int targetGrid = validMoves[Random.Range(0, validMoves.Count)];
         Vector3 targetPos = GridUtility.ToWorldPosition(targetGrid);
 
@@ -75,6 +79,7 @@ public class AIManager : MonoBehaviour
 
         // 駒の移動を実行
         BoardManager.instance.TryMovePiece(selectedPiece, targetPos);
+        
 
         // 次ターンのために全駒の validGrid を更新（プレイヤー駒はプレイヤーがShift押す想定）
         foreach (var piece in AiPieces)
@@ -111,9 +116,14 @@ public class AIManager : MonoBehaviour
     {
         List<ChessPiece> candidates = new List<ChessPiece>();
 
+        // リストから null（削除済）を除去
+        AiPieces = AiPieces.Where(p => p != null).ToList();
+
         foreach (var piece in AiPieces)
         {
             piece.pre_Moves(piece.transform.position);
+            Debug.Log($"[AI pre_Moves] {piece.name} ({piece.GetType().Name}) → valid: {piece.validGridPositions.Count}");
+
             if (piece.validGridPositions.Count > 0)
             {
                 candidates.Add(piece);
