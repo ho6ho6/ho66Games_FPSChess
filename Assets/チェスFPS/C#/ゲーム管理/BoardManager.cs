@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class BoardManager : MonoBehaviour
 {
@@ -10,10 +11,12 @@ public class BoardManager : MonoBehaviour
     private List<ChessPiece> aiPieces = new List<ChessPiece>();
     public AIManager aiManager;
     public static BoardManager instance;
+    public GameObject UI_pauseMenu;
 
     void Awake()
     {
         instance = this;
+        UI_pauseMenu.SetActive(false);  // ← 表示してボタン有効化
     }
 
 
@@ -37,6 +40,24 @@ public class BoardManager : MonoBehaviour
             aiManager.AITurn();
             isCPUMoving = false;
         }
+        
+    var result = CheckGameResult();
+        switch (result)
+        {
+            case GameResult.WhiteWins:
+                Debug.Log("白の勝利！");
+                SceneManager.LoadScene("Scene_result");
+                break;
+            
+            case GameResult.BlackWins:
+                Debug.Log("黒の勝利！");
+                SceneManager.LoadScene("Scece_result");
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     /*----------------------BoardManagerの初期設定と盤面整理----------------------*/
@@ -154,15 +175,14 @@ public class BoardManager : MonoBehaviour
                 UpdateBoardState(piece, piece.transform.position, finalPos);
                 return true;
             }
-            
-
         }
+
         Debug.Log("[TryMovePiece] Move not allowed");
         return false;
     }
 
     // 捕獲処理：ターゲット位置の駒を削除
-    private void CapturePieceAt(Vector3 target_pos)
+    public void CapturePieceAt(Vector3 target_pos)
     {   
 
         Vector2Int grid_pos = GridUtility.ToGridPosition(target_pos);
@@ -175,6 +195,41 @@ public class BoardManager : MonoBehaviour
 
             Debug.Log($"[BM CapturePieceAt] Captured {capturedPiece.name} at {grid_pos}");
         }
+    }
+
+    public enum GameResult
+    {
+        Ongoing,
+        WhiteWins,
+        BlackWins,
+        Draw,
+        None
+    }
+
+    public GameResult CheckGameResult()
+    {
+        bool whiteKingAlive = IsKingPresent(true);
+        bool blackKingAlive = IsKingPresent(false);
+
+        if (whiteKingAlive && blackKingAlive)
+            return GameResult.Ongoing;
+
+        if (!whiteKingAlive && !blackKingAlive)
+            return GameResult.Draw;
+
+        return whiteKingAlive ? GameResult.WhiteWins : GameResult.BlackWins;
+    }
+
+    public bool IsKingPresent(bool isWhite)
+    {
+        foreach (var piece in boardState.Values)
+        {
+            if (piece is King && piece.isWhite == isWhite)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /*------------------------駒の移動・捕獲・キャンセル------------------------*/
@@ -268,75 +323,6 @@ public class BoardManager : MonoBehaviour
 
         return result;
     }
-
-
-    /*チェックメイト用*/
-
-    public Vector2Int GetKingPosition(bool isWhite)
-    {
-        foreach (var kvp in boardState)
-        {
-            ChessPiece piece = kvp.Value;
-            if (piece is King && piece.isWhite == isWhite)
-            {
-                return kvp.Key;
-            }
-        }
-        return Vector2Int.zero; // キングが見つからない場合
-    }
-
-    public bool IsKingInCheck(bool isWhite)
-    {
-        Vector2Int kingPos = GetKingPosition(isWhite);
-        if (kingPos == Vector2Int.zero) return false;
-
-        // 相手の駒がキングを攻撃できるかを確認
-        foreach (var kvp in boardState)
-        {
-            ChessPiece piece = kvp.Value;
-            if (piece != null && piece.isWhite != isWhite)
-            {
-                if (piece.CanMove(kingPos))
-                {
-                    return true; // チェックされている
-                }
-            }
-        }
-        return false; // チェックされていない
-    }
-
-    public bool IsMoveIntoCheck(ChessPiece piece, Vector2Int targetPos)
-    {
-        Vector2Int originalPos = GridUtility.ToGridPosition(piece.transform.position);
-        ChessPiece capturedPiece = null;
-
-            // 移動先に敵駒がいれば記録して一時的に盤面から除去
-            if (boardState.TryGetValue(targetPos, out capturedPiece))
-            {
-                boardState.Remove(targetPos);
-                capturedPiece.gameObject.SetActive(false); // 一時的に非アクティブ
-            }
-
-        // 駒をターゲットに一時的に移動
-        boardState.Remove(originalPos);
-        boardState[targetPos] = piece;
-
-        // 味方キングがチェックされているかを確認
-        bool inCheck = IsKingInCheck(piece.isWhite);
-
-        // 状態を元に戻す
-        boardState.Remove(targetPos);
-        boardState[originalPos] = piece;
-
-            if (capturedPiece != null)
-            {
-                boardState[targetPos] = capturedPiece;
-                capturedPiece.gameObject.SetActive(true); // 復活
-            }
-
-        return inCheck;
-    }
-
 
 
 /*デバック*/

@@ -41,8 +41,6 @@ public class AIManager : MonoBehaviour
 
     IEnumerator MakeCPUMove()
     {
-        //BoardManager.instance.isCPUMoving = true;
-
         ChessPiece selectedPiece = GetRandomMovablePiece();
 
         if (selectedPiece == null)
@@ -63,39 +61,25 @@ public class AIManager : MonoBehaviour
         }
 
         Vector3 beforePos = selectedPiece.transform.position; // 必ずbeforeを保存
-        
-        //チェックメイトにならない駒を選択
-        Vector2Int targetGridPos = validMoves[Random.Range(0, validMoves.Count)];
-        targetGridPos = validMoves
-        .Where(pos => !BoardManager.instance.IsMoveIntoCheck(selectedPiece, pos))
-        .FirstOrDefault();
-        
+        Vector2Int targetGrid = validMoves[Random.Range(0, validMoves.Count)];
+        Vector3 targetPos = GridUtility.ToWorldPosition(targetGrid);
 
-        if (targetGridPos == Vector2Int.zero)
+        // 捕獲対象がいる場合、捕獲処理を先に行う
+        if (BoardManager.instance.boardState.TryGetValue(targetGrid, out ChessPiece enemyPiece))
         {
-            Debug.Log("AI: チェックになる移動先がありません！");
-            yield break;
+            if (enemyPiece.isWhite)  // AIは黒なので白だけを対象に
+            {
+                BoardManager.instance.CapturePieceAt(targetPos);
+            }
         }
 
-
-        Vector3 worldPos = GridUtility.ToWorldPosition(targetGridPos);
-        selectedPiece.MoveTo(targetGridPos);
-        BoardManager.instance.UpdateBoardState(selectedPiece, worldPos, beforePos);
-
-        Debug.Log($"AIは動いた: {selectedPiece.name} → {targetGridPos}");
+        // 駒の移動を実行
+        BoardManager.instance.TryMovePiece(selectedPiece, targetPos);
 
         // 次ターンのために全駒の validGrid を更新（プレイヤー駒はプレイヤーがShift押す想定）
         foreach (var piece in AiPieces)
         {
             piece.pre_Moves(piece.transform.position);
-        }
-
-        // チェックメイト判定
-        if (IsCheckmate())
-        {
-            Debug.Log("チェックメイト！AIの勝ちです");
-            EndAITurn();
-            yield break;
         }
 
 
@@ -109,29 +93,19 @@ public class AIManager : MonoBehaviour
         BoardManager.instance.isCPUMoving = false;
     }
 
-    private bool IsCheckmate()
+    IEnumerator InitPieces()
     {
-        // キングの位置を取得
-        Vector2Int kingPosition = boardManager.GetKingPosition(isWhite);
+        yield return null; // 1フレーム待つ
 
-        // キングがチェック状態かどうかを判定
-        if (!boardManager.IsKingInCheck(isWhite))
+        ChessPiece[] allPieces = FindObjectsByType<ChessPiece>(FindObjectsSortMode.None);
+        foreach (ChessPiece piece in allPieces)
         {
-            return false;
+            if (!piece.isWhite)
+            {
+                AiPieces.Add(piece);
+            }
         }
-
-        // // キングの周囲のマスを確認し、移動可能かどうかを判定
-        // foreach (Vector3 move in boardManager.GetKingMoves(kingPosition))
-        // {
-        //     if (!boardManager.IsOccupied(move) && !boardManager.IsMoveIntoCheck(move))
-        //     {
-        //         return false;
-        //     }
-        // }
-
-        return true;
     }
-    
 
     public ChessPiece GetRandomMovablePiece()
     {

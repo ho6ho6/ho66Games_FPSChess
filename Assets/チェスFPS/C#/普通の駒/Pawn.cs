@@ -229,14 +229,6 @@ public class Pawn : ChessPiece
                     Debug.Log($"[pre_Moves pawn] Added normal move: {oneStep}");
             }
         }
-      
-        // 現在の位置自身を含める
-        if (!validWorldPositions.Contains(GridUtility.SnapToGrid(base_pos, transform.position.y)))
-        {
-            validWorldPositions.Add(GridUtility.SnapToGrid(base_pos, transform.position.y));
-            Debug.Log($" pawn Added current position: {base_pos}");
-        }
-
 
         if(boardManager.IsWithinBounds(leftCapture)){
             validWorldPositions.Add(GridUtility.SnapToGrid(leftCapture, transform.position.y));
@@ -246,7 +238,13 @@ public class Pawn : ChessPiece
             validWorldPositions.Add(GridUtility.SnapToGrid(rightCapture, transform.position.y));
             validGridPositions.Add(GridUtility.ToGridPosition(rightCapture));
         }
-
+        
+        // 現在の位置自身を含める
+        if (!validWorldPositions.Contains(GridUtility.SnapToGrid(base_pos, transform.position.y)))
+        {
+            validWorldPositions.Add(GridUtility.SnapToGrid(base_pos, transform.position.y));
+            Debug.Log($" pawn Added current position: {base_pos}");
+        }
         Debug.Log($"[pre_Moves pawn] Final valid positions: {string.Join(", ", validWorldPositions)}");
 
         }

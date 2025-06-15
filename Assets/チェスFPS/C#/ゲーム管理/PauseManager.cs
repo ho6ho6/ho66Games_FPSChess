@@ -18,15 +18,15 @@ public class PauseManager : MonoBehaviour
 
     public void Resume()
     {
-        UI_pauseMenu.SetActive(true);
+        UI_pauseMenu.SetActive(false);
         Time.timeScale = 1f;
-        isPaused = true;
+        isPaused = false;
     }
 
     public void Pause()
     {
         Debug.Log("Pause実行中");
-        Time.timeScale = 1f;
+        UI_pauseMenu.SetActive(true);  // ← 表示してボタン有効化
         Time.timeScale = 0f;
         isPaused = true;
     }
