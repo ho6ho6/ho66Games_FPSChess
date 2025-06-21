@@ -178,21 +178,25 @@ public class Knight : ChessPiece
                 {
                     // 空きマス → 移動可能
                     validWorldPositions.Add(snapped);
+                    validGridPositions.Add(grid_Pos);    // AI用
                 }
                 else if (pieceAtPos.isWhite != this.isWhite)
                 {
                     // 敵駒がいるマス → 捕獲可能
                     validWorldPositions.Add(snapped);
+                    validGridPositions.Add(grid_Pos);    // AI用
                 }
             }
         }
 
             // 現在の位置自身を含める
-            if (!validWorldPositions.Contains(base_pos))
-            {
-                validWorldPositions.Add(base_pos);
-            }
-        }
+        Vector2Int baseGrid = GridUtility.ToGridPosition(base_pos);
+        if (!validGridPositions.Contains(baseGrid))
+            validGridPositions.Add(baseGrid);
+
+        if (!validWorldPositions.Contains(base_pos))
+            validWorldPositions.Add(base_pos);
+    }
     /*-----------------------ポーンの移動可能範囲を更新-----------------------*/
 
 

@@ -144,53 +144,58 @@ public class Queen : ChessPiece
 
 
     /*-----------------------クイーンの移動可能範囲を更新-----------------------*/
-        public override void pre_Moves(Vector3 base_pos)
-        {   
-            int board_size = 8;
-            float gridSize = grid;
-            validWorldPositions = new List<Vector3>();
+    public override void pre_Moves(Vector3 base_pos)
+    {   
+        int board_size = 8;
+        float gridSize = grid;
+        validWorldPositions = new List<Vector3>();
+            
 
-            Vector3[] move_queen = new Vector3[] {
-                new Vector3(-grid, 0, 0),   // ←
-                new Vector3(grid, 0, 0),    // →
-                new Vector3(0, 0, grid),    // ↑
-                new Vector3(0, 0, -grid),   // ↓
-                new Vector3(-grid, 0, grid),   // ↖
-                new Vector3(grid, 0, grid),    // ↗
-                new Vector3(-grid, 0, -grid),  // ↙
-                new Vector3(grid, 0, -grid)    // ↘
-            };
+        Vector3[] move_queen = new Vector3[] {
+            new Vector3(-grid, 0, 0),   // ←
+            new Vector3(grid, 0, 0),    // →
+            new Vector3(0, 0, grid),    // ↑
+            new Vector3(0, 0, -grid),   // ↓
+            new Vector3(-grid, 0, grid),   // ↖
+            new Vector3(grid, 0, grid),    // ↗
+            new Vector3(-grid, 0, -grid),  // ↙
+            new Vector3(grid, 0, -grid)    // ↘
+        };
 
-            foreach(Vector3 dir in move_queen){
+        foreach(Vector3 dir in move_queen){
 
-                for(int i=1; i<board_size; i++){
-                    Vector3 check_pos = base_pos + dir * i;
-                    Vector3 snapped = GridUtility.SnapToGrid(check_pos, transform.position.y);
-                    Vector2Int grid_Pos = GridUtility.ToGridPosition(snapped);
+            for(int i=1; i<board_size; i++){
+                Vector3 check_pos = base_pos + dir * i;
+                Vector3 snapped = GridUtility.SnapToGrid(check_pos, transform.position.y);
+                Vector2Int grid_Pos = GridUtility.ToGridPosition(snapped);
 
-                    if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)    break;
+                if(grid_Pos.x < 0 || grid_Pos.x >= board_size || grid_Pos.y < 0 || grid_Pos.y >= board_size)    break;
 
                     ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
 
                     if((pieceAtPos != null)){   //そこがボード内で
-                    Debug.Log($"[Queen pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
-                    if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
-                        validWorldPositions.Add(snapped);   //そのマスも含める
-                    }
-                    break;  //味方でも敵でもそのマス以上は進めない
+                        Debug.Log($"[Queen pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
+                        if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
+                            validWorldPositions.Add(snapped);   //そのマスも含める
+                            validGridPositions.Add(grid_Pos);    // AI用
+                        }
+                        break;  //味方でも敵でもそのマス以上は進めない
                     }
 
-                validWorldPositions.Add(snapped);   //何も無ければ進んでいい
+                    validWorldPositions.Add(snapped);   //何も無ければ進んでいい
+                    validGridPositions.Add(grid_Pos);    // AI用
                 }
                 
             }
 
-            // 現在の位置自身を含める
-            if (!validWorldPositions.Contains(base_pos))
-            {
-                validWorldPositions.Add(base_pos);
-            }
-        }
+        // 現在の位置自身を含める
+        Vector2Int baseGrid = GridUtility.ToGridPosition(base_pos);
+        if (!validGridPositions.Contains(baseGrid))
+            validGridPositions.Add(baseGrid);
+
+        if (!validWorldPositions.Contains(base_pos))
+            validWorldPositions.Add(base_pos);
+    }
     /*-----------------------クイーンの移動可能範囲を更新-----------------------*/
 
 

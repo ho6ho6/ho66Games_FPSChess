@@ -140,6 +140,7 @@ public class Rook : ChessPiece
 
             for (int i = 1; i < board_size; i++){
                 Vector3 snapped = base_pos + dir * i;
+                Vector2Int gridPos = GridUtility.ToGridPosition(snapped);
 
                 if(!boardManager.IsWithinBounds(snapped)) break;
 
@@ -149,21 +150,26 @@ public class Rook : ChessPiece
                 Debug.Log($"[Rook pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
                     if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
                         validWorldPositions.Add(snapped);   //そのマスも含める
+                        validGridPositions.Add(gridPos);    // AI用
                     }
                     break;  //味方でも敵でもそのマス以上は進めない
                 }
 
                 validWorldPositions.Add(snapped);   //何も無ければ進んでいい
+                validGridPositions.Add(gridPos);    // AI用
             }
         }
 
-            if (!validWorldPositions.Contains(base_pos))
-            {
-                validWorldPositions.Add(base_pos);
-            }
+        
+        Vector2Int baseGrid = GridUtility.ToGridPosition(base_pos);
+        if (!validGridPositions.Contains(baseGrid))
+            validGridPositions.Add(baseGrid);
+
+        if (!validWorldPositions.Contains(base_pos))
+            validWorldPositions.Add(base_pos);
 
 
-        }
+    }
 
 
     /*移動関数*/

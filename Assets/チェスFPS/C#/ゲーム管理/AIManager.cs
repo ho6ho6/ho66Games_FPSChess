@@ -23,7 +23,7 @@ public class AIManager : MonoBehaviour
             {
                 AiPieces.Add(piece);
             }
-            Debug.Log($"Found piece: {piece.name}, isWhite: {piece.isWhite}");
+            Debug.Log($"[AIManager] Found piece: {piece.name}, isWhite: {piece.isWhite}");
         }
         
     }
@@ -38,6 +38,7 @@ public class AIManager : MonoBehaviour
             BoardManager.instance.isCPUMoving = true;
             StartCoroutine(MakeCPUMove());
         }
+
         EndAITurn();
     }
 
@@ -85,9 +86,10 @@ public class AIManager : MonoBehaviour
         foreach (var piece in AiPieces)
         {
             piece.pre_Moves(piece.transform.position);
+            Debug.Log($"[AIManager] AI駒: {piece.name} ({piece.GetType().Name})");
         }
 
-
+        boardManager.UpdateBoardState(selectedPiece, targetPos, targetPos);
         EndAITurn();
         yield return null;
     }
@@ -98,32 +100,36 @@ public class AIManager : MonoBehaviour
         BoardManager.instance.isCPUMoving = false;
     }
 
-    IEnumerator InitPieces()
-    {
-        yield return null; // 1フレーム待つ
+    // IEnumerator InitPieces()
+    // {
+    //     yield return null; // 1フレーム待つ
 
-        ChessPiece[] allPieces = FindObjectsByType<ChessPiece>(FindObjectsSortMode.None);
-        foreach (ChessPiece piece in allPieces)
-        {
-            if (!piece.isWhite)
-            {
-                AiPieces.Add(piece);
-            }
-        }
-    }
+    //     ChessPiece[] allPieces = FindObjectsByType<ChessPiece>(FindObjectsSortMode.None);
+    //     foreach (ChessPiece piece in allPieces)
+    //     {
+    //         if (!piece.isWhite)
+    //         {
+    //             AiPieces.Add(piece);
+    //         }
+    //     }
+    // }
 
     public ChessPiece GetRandomMovablePiece()
     {
         List<ChessPiece> candidates = new List<ChessPiece>();
 
         // リストから null（削除済）を除去
-        AiPieces = AiPieces.Where(p => p != null).ToList();
+        //AiPieces = AiPieces.Where(p => p != null).ToList();
 
         foreach (var piece in AiPieces)
         {
             piece.pre_Moves(piece.transform.position);
+            piece.pre_Moves(piece.transform.position);
             Debug.Log($"[AI pre_Moves] {piece.name} ({piece.GetType().Name}) → valid: {piece.validGridPositions.Count}");
-
+            
+            foreach (var grid in piece.validGridPositions){
+                Debug.Log($"[AIManager] vaild_pos: x: {grid.x}, y: {grid.y} for {piece.name}");
+            }
             if (piece.validGridPositions.Count > 0)
             {
                 candidates.Add(piece);

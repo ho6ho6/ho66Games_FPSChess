@@ -111,8 +111,8 @@ public class King : ChessPiece
 
 
     /*-----------------------キングの移動可能範囲を更新-----------------------*/
-        public override void pre_Moves(Vector3 base_pos)
-        {
+    public override void pre_Moves(Vector3 base_pos)
+    {
             int board_size = 8;
             float gridSize = grid;
             validWorldPositions = new List<Vector3>();
@@ -144,21 +144,25 @@ public class King : ChessPiece
                 Debug.Log($"[King pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
                     if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
                         validWorldPositions.Add(snapped);   //そのマスも含める
+                        validGridPositions.Add(grid_Pos);    // AI用
                     }
                     break;  //味方でも敵でもそのマス以上は進めない
                 }
 
-                validWorldPositions.Add(snapped);   //何も無ければ進んでいい
+                    validWorldPositions.Add(snapped);   //何も無ければ進んでいい
+                    validGridPositions.Add(grid_Pos);    // AI用
                 }
             }
 
 
             // 現在の位置自身を含める
-            if (!validWorldPositions.Contains(base_pos))
-            {
-                validWorldPositions.Add(base_pos);
-            }
-        }
+        Vector2Int baseGrid = GridUtility.ToGridPosition(base_pos);
+        if (!validGridPositions.Contains(baseGrid))
+            validGridPositions.Add(baseGrid);
+
+        if (!validWorldPositions.Contains(base_pos))
+            validWorldPositions.Add(base_pos);
+    }
     /*-----------------------キングの移動可能範囲を更新-----------------------*/
 
 

@@ -60,6 +60,7 @@ public class BoardManager : MonoBehaviour
 
     }
 
+
     /*----------------------BoardManagerの初期設定と盤面整理----------------------*/
 
     public void SetupBoard()
