@@ -5,6 +5,7 @@ public class PauseManager : MonoBehaviour
 {
     public GameObject UI_pauseMenu;
     private bool isPaused = false;
+    public string Scene_main;
 
     void Update()
     {
@@ -34,7 +35,15 @@ public class PauseManager : MonoBehaviour
     public void Restart()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        if(SceneManager.GetActiveScene().name != Scene_main)
+        {
+            SceneManager.LoadScene(Scene_main);
+        } 
+        else 
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     public void QuitGame()
