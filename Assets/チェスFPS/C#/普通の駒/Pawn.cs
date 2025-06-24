@@ -56,23 +56,22 @@ public class Pawn : ChessPiece
         if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
             Debug.Log("非アクティブの時にシフトキー pawn");
             Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
-                pos = keep_pos;           // 一つ前に戻す
-                transform.position = pos; // 実際の位置を更新
+            pos = keep_pos;           // 一つ前に戻す
+            transform.position = pos; // 実際の位置を更新
 
                 if(GridUtility.SnapToGrid(pos, transform.position.y) == GridUtility.SnapToGrid(ini_pos, transform.position.y))
                 {
                     has_moved = false;  //初期位置に戻ればfalse
                 }
 
-                //UndoLastMove();
-                pre_Moves(pos);           // 移動範囲を再計算
+            pre_Moves(pos);           // 移動範囲を再計算
 
-                Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
-                boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
-                last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
-            }
-
+            Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
+            boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
+            last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
         }
+
+    }
         
 
     /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
@@ -83,7 +82,6 @@ public class Pawn : ChessPiece
         if(camera_Porn.activeSelf){
     /*動いたことあればhas_move = true, 無ければ false*/
 
-        //Debug.Log($"has_moved: {has_moved}"); // デバッグ用
 
         /*移動制御*/
             if(Input.GetKeyDown(KeyCode.Mouse0)){
@@ -147,14 +145,17 @@ public class Pawn : ChessPiece
 
         Vector2Int grid_targetpos = GridUtility.ToGridPosition(targetpos);
 
-        if(boardManager.TryMovePiece(this, targetpos)){
-                    last_pos = pos;
-                    pos = targetpos;
-                    transform.position = pos;
-                    has_moved = true;
-                    
-                    boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(grid_targetpos, transform.position.y));  // 移動確定時に更新
-                } else {
+        if(boardManager.TryMovePiece(this, targetpos))
+        {
+            last_pos = pos;
+            pos = targetpos;
+            transform.position = pos;
+            has_moved = true;
+            
+            boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(grid_targetpos, transform.position.y));  // 移動確定時に更新
+        } 
+        else 
+        {
             Debug.Log("Move failed pawn");
         }
     }
@@ -183,23 +184,23 @@ public class Pawn : ChessPiece
     //Pre_Movesの責任：「現在位置のポーンが」「どこに動けるかを」「Shiftでプレイヤーが決めたときに」「一度だけ更新される」
 
     /*-----------------------ポーンの移動可能範囲を更新-----------------------*/
-        public override void pre_Moves(Vector3 base_pos)
-        {
-            int direction = isWhite ? 1 : -1; // 向きを動的に設定
-            validWorldPositions = new List<Vector3>();
-            validGridPositions = new List<Vector2Int>();
+    public override void pre_Moves(Vector3 base_pos)
+    {
+        int direction = isWhite ? 1 : -1; // 向きを動的に設定
+        validWorldPositions = new List<Vector3>();
+        validGridPositions = new List<Vector2Int>();
 
-            // 捕獲マスの追加（ポーン用）
-            Vector3 leftCapture = base_pos + new Vector3(-grid, 0, grid * direction);
-            Vector3 rightCapture = base_pos + new Vector3(grid, 0, grid * direction);
+        // 捕獲マスの追加（ポーン用）
+        Vector3 leftCapture = base_pos + new Vector3(-grid, 0, grid * direction);
+        Vector3 rightCapture = base_pos + new Vector3(grid, 0, grid * direction);
 
         Debug.Log($"[pre_Moves pawn] Called with base_pos: {base_pos}, has_moved: {has_moved}");
 
 
         if(!has_moved){    //初回は2マス
-                Vector3 oneStep = base_pos + new Vector3(0, 0, 1 * grid * direction);
-                Vector3 twoStep = base_pos + new Vector3(0, 0, 2 * grid * direction);
-                Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
+            Vector3 oneStep = base_pos + new Vector3(0, 0, 1 * grid * direction);
+            Vector3 twoStep = base_pos + new Vector3(0, 0, 2 * grid * direction);
+            Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
 
             if(!boardManager.IsOccupied(forward_occupied)){ //目の前に駒がない時
 
@@ -217,8 +218,8 @@ public class Pawn : ChessPiece
             }
             
         } else {     //初回以降は1マス
-                Vector3 oneStep = base_pos + new Vector3(0, 0, 1 * grid * direction);
-                Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
+            Vector3 oneStep = base_pos + new Vector3(0, 0, 1 * grid * direction);
+            Vector3 forward_occupied = base_pos + new Vector3(0, 0, 1 * grid * direction);
 
             if(!boardManager.IsOccupied(forward_occupied)){
                 
@@ -247,7 +248,7 @@ public class Pawn : ChessPiece
         }
         Debug.Log($"[pre_Moves pawn] Final valid positions: {string.Join(", ", validWorldPositions)}");
 
-        }
+    }
     /*-----------------------ポーンの移動可能範囲を更新-----------------------*/
 
 
@@ -313,15 +314,15 @@ public class Pawn : ChessPiece
     }
 
     /*-----------------------デバッグ用：移動可能な範囲を可視化-----------------------*/
-        void OnDrawGizmos()
+    void OnDrawGizmos()
+    {
+        if (validWorldPositions != null)
         {
-            if (validWorldPositions != null)
+            Gizmos.color = Color.yellow;
+            foreach (Vector3 vaild_pos in validWorldPositions)
             {
-                Gizmos.color = Color.yellow;
-                foreach (Vector3 vaild_pos in validWorldPositions)
-                {
-                    Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
-                }
+                Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
             }
         }
     }
+}

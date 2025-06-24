@@ -9,7 +9,8 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)){
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
         Debug.Log("Esc pressed");
             if(isPaused) Resume();
             else         Pause();

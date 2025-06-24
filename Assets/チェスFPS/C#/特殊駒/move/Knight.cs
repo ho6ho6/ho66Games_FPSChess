@@ -35,16 +35,16 @@ public class Knight : ChessPiece
             if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
                 Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
 
-                    pos = keep_pos;           // 一つ前に戻す
-                    ini_pos = pos;
-                    transform.position = pos; // 実際の位置を更新
-                    pre_Moves(pos);           // 移動範囲を再計算
+                pos = keep_pos;           // 一つ前に戻す
+                ini_pos = pos;
+                transform.position = pos; // 実際の位置を更新
+                pre_Moves(pos);           // 移動範囲を再計算
 
-                    Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
-                    boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
-                    last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
+                Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
+                boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
+                last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
 
-                    Debug.Log($"[knight-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+                Debug.Log($"[knight-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
             }
         return;
 
@@ -128,10 +128,10 @@ public class Knight : ChessPiece
             transform.position = ini_pos;
         }
         
-            if(!validWorldPositions.Contains(ini_pos)){   //範囲外に出たら元の位置に戻す
-                pos = last_pos;
-                transform.position = pos;
-            }
+        if(!validWorldPositions.Contains(ini_pos)){   //範囲外に出たら元の位置に戻す
+            pos = last_pos;
+            transform.position = pos;
+        }
     }
 
     
@@ -144,13 +144,13 @@ public class Knight : ChessPiece
 
 
     /*-----------------------ナイトの移動可能範囲を更新-----------------------*/
-        public override void pre_Moves(Vector3 base_pos)
-        {
-            int board_size = 8;
-            float gridSize = grid;  //100
-            validWorldPositions = new List<Vector3>();
+    public override void pre_Moves(Vector3 base_pos)
+    {
+        int board_size = 8;
+        float gridSize = grid;  //100
+        validWorldPositions = new List<Vector3>();
 
-            Vector3[] move_knight = new Vector3[]{
+        Vector3[] move_knight = new Vector3[]{
 
         new Vector3(-1, 0, 2) * gridSize, // 左上
         new Vector3(-2, 0, 1) * gridSize,  // 左上の一個下
@@ -202,17 +202,17 @@ public class Knight : ChessPiece
 
 
     /*-----------------------デバッグ用：移動可能な範囲を可視化-----------------------*/
-        void OnDrawGizmos()
+    void OnDrawGizmos()
+    {
+        if (validWorldPositions != null)
         {
-            if (validWorldPositions != null)
+            Gizmos.color = Color.magenta;
+            foreach (Vector3 vaild_pos in validWorldPositions)
             {
-                Gizmos.color = Color.magenta;
-                foreach (Vector3 vaild_pos in validWorldPositions)
-                {
-                    Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
-                }
+                Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
             }
         }
+    }
 
     private bool IsInValidPos(Vector3 target)
     {

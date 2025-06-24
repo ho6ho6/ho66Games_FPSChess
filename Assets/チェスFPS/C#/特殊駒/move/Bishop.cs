@@ -86,14 +86,6 @@ public class Bishop : ChessPiece
                 pos = new_pos;
                 keep_pos = pos;
 
-                /*駒の有無*/
-                // ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
-                // if(target_pos != null && target_pos.isWhite != this.isWhite){
-                //     Debug.Log($"[bishop] target_pos: {target_pos}");
-                //     TryCapture(pos);
-                // } else {
-                //     TryMove(pos);
-                // }
                 Vector2Int capture_Pos = GridUtility.ToGridPosition(pos);
                 if(CanCapture(capture_Pos) && boardManager.IsOccupied(pos)){
                     Debug.Log("[bishop]TryCaptureします");
@@ -145,7 +137,7 @@ public class Bishop : ChessPiece
                 ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
 
                 if((pieceAtPos != null)){   //そこがボード内で
-                Debug.Log($"[Bishop pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
+                    Debug.Log($"[Bishop pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
                     if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
                         validWorldPositions.Add(snapped);   //そのマスも含める
                     }

@@ -31,7 +31,7 @@ public class AIManager : MonoBehaviour
 
     public void AITurn()
     {
-            Debug.Log("[AIManager] AITurn開始");
+        Debug.Log("[AIManager] AITurn開始");
         if (!BoardManager.instance.isCPUMoving)
         {
             Debug.Log("[AIManager] 既にAIが動いている");
@@ -99,20 +99,6 @@ public class AIManager : MonoBehaviour
         BoardManager.instance.isWhiteTurn = true;
         BoardManager.instance.isCPUMoving = false;
     }
-
-    // IEnumerator InitPieces()
-    // {
-    //     yield return null; // 1フレーム待つ
-
-    //     ChessPiece[] allPieces = FindObjectsByType<ChessPiece>(FindObjectsSortMode.None);
-    //     foreach (ChessPiece piece in allPieces)
-    //     {
-    //         if (!piece.isWhite)
-    //         {
-    //             AiPieces.Add(piece);
-    //         }
-    //     }
-    // }
 
     public ChessPiece GetRandomMovablePiece()
     {

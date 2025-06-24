@@ -110,17 +110,7 @@ public class Queen : ChessPiece
                 last_pos = pos;
                 pos = new_pos;
                 keep_pos = pos;
-                
-                /*ここで敵駒の有無をチェック*/
-                // ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
 
-                // if(target_pos != null && target_pos.isWhite != this.isWhite){
-                //     if(boardManager.TryMovePiece(this, pos))
-                //     TryCapture(pos);
-                // } else {
-                //     if(boardManager.TryMovePiece(this, pos))
-                //     TryMove(pos);
-                // }
                 Vector2Int capture_Pos = GridUtility.ToGridPosition(pos);
                 if(CanCapture(capture_Pos) && boardManager.IsOccupied(pos)){
                     Debug.Log("[queen]Trycaptureします");
@@ -135,11 +125,11 @@ public class Queen : ChessPiece
             }
         }
 
-            if(!validWorldPositions.Contains(pos)){   //範囲外に出たら元の位置に戻す
-                pos = last_pos;
-                transform.position = pos;
-            }
+        if(!validWorldPositions.Contains(pos)){   //範囲外に出たら元の位置に戻す
+            pos = last_pos;
+            transform.position = pos;
         }
+    }
     /*-----------------------動き-----------------------*/
 
 
@@ -182,11 +172,11 @@ public class Queen : ChessPiece
                         break;  //味方でも敵でもそのマス以上は進めない
                     }
 
-                    validWorldPositions.Add(snapped);   //何も無ければ進んでいい
-                    validGridPositions.Add(grid_Pos);    // AI用
-                }
-                
+                validWorldPositions.Add(snapped);   //何も無ければ進んでいい
+                validGridPositions.Add(grid_Pos);    // AI用
             }
+                
+        }
 
         // 現在の位置自身を含める
         Vector2Int baseGrid = GridUtility.ToGridPosition(base_pos);

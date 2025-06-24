@@ -35,7 +35,8 @@ public class BoardManager : MonoBehaviour
 
     void Update()
     {
-        if(!isWhiteTurn && !isCPUMoving){
+        if(!isWhiteTurn && !isCPUMoving)
+        {
             Debug.Log("[BoardManager] AIターン開始");
             aiManager.AITurn();
             isCPUMoving = false;
@@ -67,12 +68,12 @@ public class BoardManager : MonoBehaviour
     {   
         Debug.Log("BoardManager Start Called");
 
-    List<ChessPiece> pawns = new List<ChessPiece>();
-    List<ChessPiece> rooks = new List<ChessPiece>();
-    List<ChessPiece> knights = new List<ChessPiece>();
-    List<ChessPiece> bishops = new List<ChessPiece>();
-    List<ChessPiece> queens = new List<ChessPiece>();
-    List<ChessPiece> kings = new List<ChessPiece>();
+        List<ChessPiece> pawns = new List<ChessPiece>();
+        List<ChessPiece> rooks = new List<ChessPiece>();
+        List<ChessPiece> knights = new List<ChessPiece>();
+        List<ChessPiece> bishops = new List<ChessPiece>();
+        List<ChessPiece> queens = new List<ChessPiece>();
+        List<ChessPiece> kings = new List<ChessPiece>();
 
 
 
@@ -128,7 +129,8 @@ public class BoardManager : MonoBehaviour
         Debug.Log($"[UpdateBoardState] {piece.name}: {lastGridPos} → {newGridPos}");
 
         //古い位置の駒を削除
-        if(boardState.ContainsKey(lastGridPos)){
+        if(boardState.ContainsKey(lastGridPos))
+        {
             // 古い位置を null で上書き
             boardState.Remove(lastGridPos);
             Debug.Log($"[UpdateBoardState] {piece.name} removed from {lastGridPos} (set to null)");
@@ -157,7 +159,8 @@ public class BoardManager : MonoBehaviour
         Vector2Int gridPos = GridUtility.ToGridPosition(finalPos);  //ロジック用
         Debug.Log($"[TryMovePiece] Called with {piece.name} → {finalPos}");
 
-        if(piece.CanMove(gridPos)){
+        if(piece.CanMove(gridPos))
+        {
             Debug.Log("[TryMovePiece] CanMove OK");
             //RecordMove(piece, GridUtility.ToGridPosition(piece.transform.position), gridPos);
 
@@ -165,11 +168,14 @@ public class BoardManager : MonoBehaviour
 
             UpdateBoardState(piece, piece.transform.position, finalPos); //位置更新
             return true;
-        } else if(piece.CanCapture(gridPos)){
+        } 
+        else if(piece.CanCapture(gridPos))
+        {
             Debug.Log("[TryMovePiece] CanCapture OK");
             ChessPiece captured = boardState.ContainsKey(gridPos) ? boardState[gridPos] : null;
             
-            if(Input.GetKeyDown(KeyCode.LeftShift)){
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
                 CapturePieceAt(finalPos);
                 piece.MoveTo(gridPos);
 
@@ -270,7 +276,8 @@ public class BoardManager : MonoBehaviour
 
         if (boardState.TryGetValue(gridPos, out ChessPiece piece))
         {
-            if(piece == exclude) {
+            if(piece == exclude)
+            {
                 return null;
             }
             return piece;
@@ -341,10 +348,10 @@ public class BoardManager : MonoBehaviour
     public void LogBoardState()
     {
     Debug.Log("===== BoardState: Current Pieces =====");
-    foreach (var kvp in boardState)
-    {
-        string pieceName = kvp.Value != null ? kvp.Value.name : "None";
-        Debug.Log($"Grid {kvp.Key} → {pieceName}");
-    }
+        foreach (var kvp in boardState)
+        {
+            string pieceName = kvp.Value != null ? kvp.Value.name : "None";
+            Debug.Log($"Grid {kvp.Key} → {pieceName}");
+        }
     }
 }

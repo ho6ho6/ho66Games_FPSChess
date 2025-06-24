@@ -15,15 +15,15 @@ public class camera_porn33 : MonoBehaviour
     {
           
             //S+A　S+Dで上下見る
-                if(Input.GetKeyDown(KeyCode.A) && Camera_porn33.activeSelf){
-                transform.Rotate(-2, 0, 0, Space.Self);
-            } else if(Input.GetKeyDown(KeyCode.D) && Camera_porn33.activeSelf){
-                transform.Rotate(2, 0, 0, Space.Self);
-                }
+        if(Input.GetKeyDown(KeyCode.A) && Camera_porn33.activeSelf){
+            transform.Rotate(-2, 0, 0, Space.Self);
+        } else if(Input.GetKeyDown(KeyCode.D) && Camera_porn33.activeSelf){
+            transform.Rotate(2, 0, 0, Space.Self);
+        }
 
-            //回転・向きの初期化
-            if(Input.GetKeyDown(KeyCode.LeftControl) && Camera_porn33.activeSelf){
-                gameObject.transform.rotation = initial_rote;
+        //回転・向きの初期化
+        if(Input.GetKeyDown(KeyCode.LeftControl) && Camera_porn33.activeSelf){
+            gameObject.transform.rotation = initial_rote;
         }
     }
 }

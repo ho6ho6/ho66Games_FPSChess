@@ -30,26 +30,26 @@ public class Rook : ChessPiece
         int direction = isWhite ? 1 : -1;
 
         /*カメラが非アクティブの時にシフトキーが押されたら動けないようにする*/
-    if(!camera_rook.activeSelf){
+        if(!camera_rook.activeSelf){
 
-        if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
-                Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
+            if(Input.GetKeyDown(KeyCode.LeftShift) && isWhite){
+                    Vector3 oldPosBeforeShift = pos; // シフトキー押下前の位置を保持
 
-                pos = keep_pos;           // 一つ前に戻す
-                transform.position = pos; // 実際の位置を更新                
-                pre_Moves(pos);           // 移動範囲を再計算
+                    pos = keep_pos;           // 一つ前に戻す
+                    transform.position = pos; // 実際の位置を更新                
+                    pre_Moves(pos);           // 移動範囲を再計算
 
-                Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
-                boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
-                last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
+                    Vector2Int oldGridPos = GridUtility.ToGridPosition(oldPosBeforeShift);
+                    boardManager.UpdateBoardState(this, pos, GridUtility.ToWorldPosition(oldGridPos, transform.position.y));
+                    last_pos = pos;           // 前回の位置も更新して不整合を防ぐ
 
-                Debug.Log($"[Rook-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+                    Debug.Log($"[Rook-{this.name}] Shiftで位置を巻き戻し：{oldPosBeforeShift} → {pos}");
+            }
+            return;
         }
-        return;
-    }
         
-    if(camera_rook.activeSelf){
-        /*移動制御*/
+        if(camera_rook.activeSelf){
+            /*移動制御*/
             if(Input.GetKeyDown(KeyCode.Mouse0)){
                 new_pos = pos + new Vector3(0, 0, grid); //前方に移動 z
                 if(IsInValidPos(new_pos)){
@@ -72,7 +72,7 @@ public class Rook : ChessPiece
                 }
             }
 
-        /*移動制御*/
+            /*移動制御*/
 
             // 左シフトキーが押されたら現在位置で移動範囲を再計算
             if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -81,16 +81,7 @@ public class Rook : ChessPiece
                 last_pos = pos;
                 pos = new_pos;
                 keep_pos = pos;
-                
-                /*ここで敵駒の有無をチェック*/
-                // ChessPiece target_pos = boardManager.GetPieceAtPosition(pos, this);
-                // if(target_pos != null && target_pos.isWhite != this.isWhite){
-                //     if(boardManager.TryMovePiece(this, pos))
-                //     TryCapture(pos);
-                // } else {
-                //     if(boardManager.TryMovePiece(this, pos))
-                //     TryMove(pos);
-                // }
+
                 Vector2Int capture_Pos = GridUtility.ToGridPosition(pos);
                 if(CanCapture(capture_Pos) && boardManager.IsOccupied(pos)){
                     Debug.Log("[bishop]TryCaptureします");
@@ -124,16 +115,16 @@ public class Rook : ChessPiece
 
     public override void pre_Moves(Vector3 base_pos)
     {
-            int board_size = 8;
-            float gridSize = grid;
-            validWorldPositions = new List<Vector3>();
+        int board_size = 8;
+        float gridSize = grid;
+        validWorldPositions = new List<Vector3>();
 
-            Vector3[] move_rook = new Vector3[] {
-            new Vector3(0, 0, grid),   // ↑
-            new Vector3(0, 0, -grid),  // ↓
-            new Vector3(grid, 0, 0),   // →
-            new Vector3(-grid, 0, 0)   // ←
-            };
+        Vector3[] move_rook = new Vector3[] {
+        new Vector3(0, 0, grid),   // ↑
+        new Vector3(0, 0, -grid),  // ↓
+        new Vector3(grid, 0, 0),   // →
+        new Vector3(-grid, 0, 0)   // ←
+        };
 
             
         foreach(Vector3 dir in move_rook){
@@ -147,7 +138,7 @@ public class Rook : ChessPiece
                 ChessPiece pieceAtPos = boardManager.GetPieceAtPosition(snapped, this);
                 
                 if((pieceAtPos != null)){   //そこがボード内で
-                Debug.Log($"[Rook pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
+                    Debug.Log($"[Rook pre_Moves] 発見: {pieceAtPos.name} @ {snapped}");
                     if(pieceAtPos.isWhite != this.isWhite){ //何か駒があり、それが黒で自分も黒なら
                         validWorldPositions.Add(snapped);   //そのマスも含める
                         validGridPositions.Add(gridPos);    // AI用
@@ -234,15 +225,15 @@ public class Rook : ChessPiece
 
 
     /*-----------------------デバッグ用：移動可能な範囲を可視化-----------------------*/
-        void OnDrawGizmos()
+    void OnDrawGizmos()
+    {
+        if (validWorldPositions != null)
         {
-            if (validWorldPositions != null)
+            Gizmos.color = Color.blue;
+            foreach (Vector3 vaild_pos in validWorldPositions)
             {
-                Gizmos.color = Color.blue;
-                foreach (Vector3 vaild_pos in validWorldPositions)
-                {
-                    Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
-                }
+                Gizmos.DrawWireCube(vaild_pos, new Vector3(grid * 0.8f, 0.1f, grid * 0.8f));
             }
         }
     }
+}

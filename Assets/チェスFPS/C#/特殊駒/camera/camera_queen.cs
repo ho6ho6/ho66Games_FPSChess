@@ -17,12 +17,12 @@ public class camera_queen : MonoBehaviour
         if(Input.GetKey(KeyCode.S)){
             
             //S+A　S+Dで上下見る
-                if(Input.GetKeyDown(KeyCode.A) && Camera_queen.activeSelf){
+            if(Input.GetKeyDown(KeyCode.A) && Camera_queen.activeSelf){
                 transform.Rotate(-2, 0, 0, Space.Self);
             } else if(Input.GetKeyDown(KeyCode.D) && Camera_queen.activeSelf){
                 transform.Rotate(2, 0, 0, Space.Self);
                 }
-            } else {
+        } else {
             
             //A,Dでカメラを移動
             if(Input.GetKeyDown(KeyCode.A) && Camera_queen.activeSelf){
@@ -34,7 +34,7 @@ public class camera_queen : MonoBehaviour
             //回転・向きの初期化
             if(Input.GetKeyDown(KeyCode.LeftControl) && Camera_queen.activeSelf){
                 gameObject.transform.rotation = initial_rote;
-        }
+            }
         }
 
     }

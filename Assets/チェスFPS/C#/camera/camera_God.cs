@@ -18,7 +18,8 @@ public class camera_God : MonoBehaviour
     {
 
             //回転・向きの初期化
-            if(Input.GetKeyDown(KeyCode.LeftControl) && Camera_god.activeSelf){
+        if(Input.GetKeyDown(KeyCode.LeftControl) && Camera_god.activeSelf)
+        {
                 gameObject.transform.rotation = initial_rote;
                 gameObject.transform.position = initial_pos;
         }

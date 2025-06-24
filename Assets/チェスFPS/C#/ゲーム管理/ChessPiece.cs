@@ -17,7 +17,8 @@ public abstract class ChessPiece : MonoBehaviour
     }
 
 
-    protected Vector3 SnapToGrid(Vector3 original, float y) {
+    protected Vector3 SnapToGrid(Vector3 original, float y)
+    {
         // return new Vector3(Mathf.Round(original.x), original.y, Mathf.Round(original.z));
         return GridUtility.SnapToGrid(original, y);
     }
@@ -44,7 +45,8 @@ public abstract class ChessPiece : MonoBehaviour
     }
 
 
-    public virtual void TryMove(Vector3 target_pos) {
+    public virtual void TryMove(Vector3 target_pos)
+    {
         Debug.LogWarning($"{this.name} TryMove not implemented");
     }
 
