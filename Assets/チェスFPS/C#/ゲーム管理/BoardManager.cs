@@ -267,6 +267,19 @@ public class BoardManager : MonoBehaviour
                 /*つまり、過去の自分が未来の自分を邪魔しているから1マスしか進めない*/
     }
 
+    public bool IsOccupiedByEnemy(Vector3 world_Pos, bool isWhite)
+    {
+
+        Vector2Int gridPos = GridUtility.ToGridPosition(world_Pos);
+
+        if (boardState.ContainsKey(gridPos))
+        {
+            ChessPiece piece = boardState[gridPos];
+            return piece != null && piece.isWhite != isWhite;
+        }
+        return false;
+    }
+
 
     // GetPieceAtPositionメソッドを追加
     public ChessPiece GetPieceAtPosition(Vector3 worldPos, ChessPiece exclude)
