@@ -584,6 +584,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 966873166}
     m_Modifications:
     - target: {fileID: 415076864958561685, guid: 773463f160051af44879c86220e33cc5, type: 3}
+      propertyPath: m_text
+      value: "Left Click\tLeft\tFront\nRight Click\tRight Front\nZ Key\t\tBack Left\nX
+        Key\t\tBack Right\nShift Key\tDecision\n \nA Key\t\tView Left\nD Key\t\tView
+        Right\nS + A Key\tView Down\nS + D Key\tView UP"
+      objectReference: {fileID: 0}
+    - target: {fileID: 415076864958561685, guid: 773463f160051af44879c86220e33cc5, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: bb6c950118d9d294c8c99e05b9097d7c, type: 2}
@@ -608,8 +614,16 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5406543463899494496, guid: 773463f160051af44879c86220e33cc5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406543463899494496, guid: 773463f160051af44879c86220e33cc5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 829.4
+      value: 793
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406543463899494496, guid: 773463f160051af44879c86220e33cc5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 463
       objectReference: {fileID: 0}
     - target: {fileID: 7244047993900949403, guid: 773463f160051af44879c86220e33cc5, type: 3}
       propertyPath: m_Pivot.x
@@ -1136,7 +1150,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2814602160589909908, guid: eacfa6fb59fcac74bbde126d5c82582c, type: 3}
       propertyPath: m_text
-      value: "Left Click\t  Front\nRight Click Right\nZ Key\t  Left\nX Key\t  Back\nShit
+      value: "Left Click\t  Front\nRight Click Right\nZ Key\t  Left\nX Key\t  Back\nShift
         Key\t  Decision\n \nA Key\t  View Left\nD Key\t  View Right\nS + A Key\t 
         View Down\nS + D Key\t  View UP"
       objectReference: {fileID: 0}
@@ -1166,7 +1180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4152297027666173683, guid: eacfa6fb59fcac74bbde126d5c82582c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 481.5
+      value: 439
       objectReference: {fileID: 0}
     - target: {fileID: 6480135912111119264, guid: eacfa6fb59fcac74bbde126d5c82582c, type: 3}
       propertyPath: m_Name
@@ -1585,6 +1599,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 966873166}
     m_Modifications:
     - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
+      propertyPath: m_text
+      value: "Lef Click\tFront Left\nRight Click\tFront Left -1\nF Key\t\tBack Left\nG
+        Key\t\tBack Left -1\nH Key\t\tBack Right -1\nV Key\t\tBack Right\nB Key\t\tFront
+        Right -1\nN Key\t\tFront Right\nShift Key\tDecision\n \nA Key\t\tView Front\nD
+        Key\t\tView Back"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
+      propertyPath: m_fontSize
+      value: 36.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
+      propertyPath: m_margin.w
+      value: -599.7899
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
+      propertyPath: m_margin.z
+      value: -285.96646
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: bb6c950118d9d294c8c99e05b9097d7c, type: 2}
@@ -1599,6 +1632,10 @@ PrefabInstance:
     - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_fontColor.r
       value: 0.12941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 36.3
       objectReference: {fileID: 0}
     - target: {fileID: 2409805102241432373, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_sharedMaterial
@@ -1717,12 +1754,16 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5115602178854768802, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115602178854768802, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 800
+      value: 187
       objectReference: {fileID: 0}
     - target: {fileID: 5115602178854768802, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 780
+      value: 805
       objectReference: {fileID: 0}
     - target: {fileID: 6878757350929437554, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_Layer
@@ -1790,7 +1831,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5066266495684013565, guid: 9668b17b3d188d3418fba00f005befe1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     - target: {fileID: 6032810868140394763, guid: 9668b17b3d188d3418fba00f005befe1, type: 3}
       propertyPath: m_Name
@@ -2575,7 +2616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2245364983836323727, guid: b157cc8ddd455b94090158e4df2624ba, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     - target: {fileID: 3808233904811437522, guid: b157cc8ddd455b94090158e4df2624ba, type: 3}
       propertyPath: m_Camera
@@ -3865,7 +3906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6661396855410306673, guid: 1117be8fd105c354c8460e76743c3d49, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242
       objectReference: {fileID: 0}
     - target: {fileID: 7779805060292695491, guid: 1117be8fd105c354c8460e76743c3d49, type: 3}
       propertyPath: m_Pivot.x
@@ -4265,7 +4306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1177110153719476992, guid: b443fdbd53d8adb49aa1db0489fdbfe6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     - target: {fileID: 2047282040138652944, guid: b443fdbd53d8adb49aa1db0489fdbfe6, type: 3}
       propertyPath: m_Pivot.x
@@ -4813,7 +4854,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2968681243759179873, guid: e111081a9dd05864cafc1170935aa287, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 821.6
+      value: 802
       objectReference: {fileID: 0}
     - target: {fileID: 3626717010034580035, guid: e111081a9dd05864cafc1170935aa287, type: 3}
       propertyPath: m_UiScaleMode
@@ -4835,6 +4876,12 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1355126450}
+    - target: {fileID: 7213356965366002531, guid: e111081a9dd05864cafc1170935aa287, type: 3}
+      propertyPath: m_text
+      value: "Left Click\tFront\nRight Click\tRight\nZ Key\t\tLeft\nX Key\t\tDown\nShift
+        Key\tDecision\n \nA Key\t\tView Left\nD Key\t\tView Right\nS + A Key\tView
+        Down\nS + D Key\tView UP"
+      objectReference: {fileID: 0}
     - target: {fileID: 7213356965366002531, guid: e111081a9dd05864cafc1170935aa287, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -5257,7 +5304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7320968381483129698, guid: e623480c4b4a3ac4bbcfea48c1d19e3c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5612,8 +5659,16 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7643685265130714366, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -36
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643685265130714366, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 829.4
+      value: 793
+      objectReference: {fileID: 0}
+    - target: {fileID: 7643685265130714366, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 453
       objectReference: {fileID: 0}
     - target: {fileID: 7789797794775140625, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
       propertyPath: m_Name
@@ -5622,6 +5677,12 @@ PrefabInstance:
     - target: {fileID: 7789797794775140625, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7807920519928406057, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
+      propertyPath: m_text
+      value: "Left Click\tLeft\tFront\nRight Click\tRight Front\nZ Key\t\tBack Left\nX
+        Key\t\tBack Right\nShift Key\tDecision\n \nA Key\t\tView Left\nD Key\t\tView
+        Right\nS + A Key\tView Down\nS + D Key\tView UP"
       objectReference: {fileID: 0}
     - target: {fileID: 7807920519928406057, guid: 54ec5ba0209ef2744be9145d17f71254, type: 3}
       propertyPath: m_fontAsset
@@ -5667,7 +5728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3069546368534453599, guid: b0b6def31027671468daddbdce5e69c7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     - target: {fileID: 3858608089992698006, guid: b0b6def31027671468daddbdce5e69c7, type: 3}
       propertyPath: m_text
@@ -5918,11 +5979,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1859588494077161139, guid: 194746def69716c4b91771a57a8acc8b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 481.5
+      value: 439
       objectReference: {fileID: 0}
     - target: {fileID: 3546795277181056481, guid: 194746def69716c4b91771a57a8acc8b, type: 3}
       propertyPath: m_text
-      value: "Left Click\t  Front\nRight Click Right\nZ Key\t  Left\nX Key\t  Back\nShit
+      value: "Left Click\t  Front\nRight Click Right\nZ Key\t  Left\nX Key\t  Back\nShift
         Key\t  Decision\n \nA Key\t  View Left\nD Key\t  View Right\nS + A Key\t 
         View Down\nS + D Key\t  View UP"
       objectReference: {fileID: 0}
@@ -6310,7 +6371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5487612503832134598, guid: 66419ee819609a347afa30b2cd9f996e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     - target: {fileID: 5665813173658056343, guid: 66419ee819609a347afa30b2cd9f996e, type: 3}
       propertyPath: m_Name
@@ -6663,11 +6724,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 365455708994382039, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 800
+      value: 435
       objectReference: {fileID: 0}
     - target: {fileID: 365455708994382039, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 780
+      value: 805
       objectReference: {fileID: 0}
     - target: {fileID: 644964807612512725, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_Layer
@@ -6754,6 +6815,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
+      propertyPath: m_text
+      value: "Lef Click\tFront Left\nRight Click\tFront Left -1\nF Key\t\tBack Left\nG
+        Key\t\tBack Left -1\nH Key\t\tBack Right -1\nV Key\t\tBack Right\nB Key\t\tFront
+        Right -1\nN Key\t\tFront Right\nShift Key\tDecision\n \nA Key\t\tView Front\nD
+        Key\t\tView Back"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
+      propertyPath: m_fontSize
+      value: 36.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
+      propertyPath: m_margin.w
+      value: -418.32712
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
+      propertyPath: m_margin.x
+      value: -306.18884
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
+      propertyPath: m_margin.z
+      value: -161.75261
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: bb6c950118d9d294c8c99e05b9097d7c, type: 2}
@@ -6768,6 +6852,10 @@ PrefabInstance:
     - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_fontColor.r
       value: 0.12785566
+      objectReference: {fileID: 0}
+    - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 36.3
       objectReference: {fileID: 0}
     - target: {fileID: 4942767696856996956, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_sharedMaterial
@@ -7419,6 +7507,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 966873166}
     m_Modifications:
     - target: {fileID: 415076864958561685, guid: 8566611a7c8fb2d40bf28dcf04901c13, type: 3}
+      propertyPath: m_text
+      value: "Left Click\tFront\nRight Click\tRight\nZ Key\t\tLeft\nX Key\t\tDown\nF
+        Key\t\tFront Left\nG Key\t\tFront Right\nC Key\t\tDown Left\nV Key\t\tDown
+        Right\nShift Key\tDecision\n \nA Key\t\tView Left\nD Key\t\tView Right\nS
+        + A Key\tView Down\nS + D Key\tView UP"
+      objectReference: {fileID: 0}
+    - target: {fileID: 415076864958561685, guid: 8566611a7c8fb2d40bf28dcf04901c13, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: bb6c950118d9d294c8c99e05b9097d7c, type: 2}
@@ -7448,7 +7543,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5406543463899494496, guid: 8566611a7c8fb2d40bf28dcf04901c13, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 802.4
+      value: 760
       objectReference: {fileID: 0}
     - target: {fileID: 5406543463899494496, guid: 8566611a7c8fb2d40bf28dcf04901c13, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -7582,7 +7677,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 116957568784245221, guid: c3f596900f34f9842b9243d473cfbbab, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1290.78
+      value: 1242.0005
       objectReference: {fileID: 0}
     - target: {fileID: 1194620779642437186, guid: c3f596900f34f9842b9243d473cfbbab, type: 3}
       propertyPath: m_UiScaleMode
