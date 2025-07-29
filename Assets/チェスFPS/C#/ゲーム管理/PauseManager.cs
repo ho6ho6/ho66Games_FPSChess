@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class PauseManager : MonoBehaviour
 {
     public GameObject UI_pauseMenu;
+    public GameObject IsUI_show;
     private bool isPaused = false;
     public string Scene_main;
 
@@ -14,7 +15,11 @@ public class PauseManager : MonoBehaviour
         Debug.Log("Esc pressed");
             if(isPaused) Resume();
             else         Pause();
-        
+        }
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            IsUI_show.SetActive(!IsUI_show.activeSelf);
         }
     }
 

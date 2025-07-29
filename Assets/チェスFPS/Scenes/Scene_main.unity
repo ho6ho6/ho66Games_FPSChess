@@ -1322,7 +1322,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15, y: -387}
+  m_AnchoredPosition: {x: 38, y: -387}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &397893024
@@ -1763,7 +1763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5115602178854768802, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 805
+      value: 132.99994
       objectReference: {fileID: 0}
     - target: {fileID: 6878757350929437554, guid: efe93f8c04d87314fbceb472adc5f907, type: 3}
       propertyPath: m_Layer
@@ -3569,6 +3569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 966873166}
+  - component: {fileID: 966873167}
   m_Layer: 5
   m_Name: "\u64CD\u4F5C\u65B9\u6CD5"
   m_TagString: Untagged
@@ -3608,6 +3609,21 @@ Transform:
   - {fileID: 1078203140}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &966873167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966873165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a854524cb4c8cc346b502323ae5946fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_pauseMenu: {fileID: 1102748754}
+  IsUI_show: {fileID: 966873165}
+  Scene_main: Scene_main
 --- !u!1001 &1026697630
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5147,6 +5163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UI_pauseMenu: {fileID: 1102748754}
+  IsUI_show: {fileID: 966873165}
   Scene_main: Scene_main
 --- !u!1001 &1460030804
 PrefabInstance:
@@ -6720,7 +6737,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 365455708994382039, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 365455708994382039, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -6728,7 +6745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 365455708994382039, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 805
+      value: 133
       objectReference: {fileID: 0}
     - target: {fileID: 644964807612512725, guid: e989368fb6bbf8e4280abfb5874d157b, type: 3}
       propertyPath: m_Layer
@@ -6992,7 +7009,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1174380671425283498, guid: a1fb11f972a925b4d98326ddb7b84c3f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1315.5
+      value: 1312
       objectReference: {fileID: 0}
     - target: {fileID: 1918425262924394169, guid: a1fb11f972a925b4d98326ddb7b84c3f, type: 3}
       propertyPath: m_Camera
@@ -7080,11 +7097,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6223176052325267473, guid: a1fb11f972a925b4d98326ddb7b84c3f, type: 3}
       propertyPath: m_text
-      value: '1 ~ 8 Front Line
+      value: '1~8 Front Line
 
-        Q ~ I Back Line
+        Q~I Back Line
 
-        Escape Setting'
+        Tab  UI On/Off
+
+        Escape
+        Setting'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223176052325267473, guid: a1fb11f972a925b4d98326ddb7b84c3f, type: 3}
+      propertyPath: m_margin.z
+      value: 230.60431
       objectReference: {fileID: 0}
     - target: {fileID: 6223176052325267473, guid: a1fb11f972a925b4d98326ddb7b84c3f, type: 3}
       propertyPath: m_fontAsset
