@@ -12,6 +12,8 @@
 
 # ビルド/実行方法
 FPS_Chess_試作品.exe を実行する - UnityRoomにも投稿してあります。
+UnityRoomのURLです
+https://unityroom.com/games/ho66games_fpschess
 
 # 設計と実装ポイント
 - スクリプトを分けて役割を明確にして開発を行いやすくする努力をしました。
