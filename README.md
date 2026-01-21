@@ -1,4 +1,7 @@
-## FPS Chess (一人称チェス)
+# FPS Chess (一人称チェス)
+
+現在は下記のURLで、開発状況の更新を行っています </br>
+リメイクした一人称チェスのGithub URL:https://github.com/ho6ho6/Chess_FistPerson </br>
 
 # 概要
 全世界で人気のあるボードゲームのチェスをモチーフにしたゲームです。
